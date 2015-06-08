@@ -53,19 +53,26 @@ public class PCConn {
 			String s = null;
 			int n = 0;
 
-			do {
-				System.out.println("Sending: " + n);
-				out.writeBytes(String.valueOf(n) + "\n");
-				out.flush();
+			out.writeBytes("Are you ready?\n");
+			out.flush();
+			
+			while((s = in.readLine()).equals(null)) System.out.println("");
 				
-				while((s = in.readLine()).equals(null)) {
-					System.out.println("Waiting....");
-				}
-				
-				System.out.println("Received: " + s);
-				
-				n++;
-			} while(n < 1000);
+			System.out.println(s);
+			
+			out.writeBytes("Move forward\n");
+			out.flush();
+			
+			while((s = in.readLine()).equals(null)) System.out.println("");
+			
+			System.out.println(s);
+			
+			out.writeBytes("Move backward\n");
+			out.flush();
+			
+			while((s = in.readLine()).equals(null)) System.out.println("");
+			
+			System.out.println(s);
 			
 			out.writeBytes("END\n");
 			out.flush();

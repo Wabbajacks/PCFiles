@@ -7,5 +7,6 @@
 			<accessrule kind="discouraged" pattern="**/internal/**"/>
 		</accessrules>
 	</classpathentry>
+	<classpathentry kind="lib" path="bluecove-2.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
