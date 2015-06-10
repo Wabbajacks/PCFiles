@@ -21,8 +21,11 @@ public class PCConn {
 	public PCConn() {
 		new PCConn("NONE");
 	}
+	
 	/**
-	 * Class constructor. Will establish connection to a given address (MAC).
+	 * Class constructor. Will establish connection to a given address (MAC).<br><br>
+	 * 
+	 * Note: if no address is given the PC will try and establish a connection to the first found/nearest NXT brick.
 	 * 
 	 * @param address Address to NXT brick (MAC-address format).
 	 * @throws NXTCommException If any communication error occurs between PC and NXT brick.
