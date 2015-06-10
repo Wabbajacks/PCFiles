@@ -18,7 +18,7 @@ public class PCConn {
 	private DataOutputStream out;
 	private NXTConnector conn;
 	private String address;
-	private String response;
+	private String response = null;
 	
 	public PCConn() {
 		new PCConn("NONE");
@@ -100,26 +100,20 @@ public class PCConn {
 		try {
 			StringBuilder str = new StringBuilder();
 			
-			for(String s : msgs)
-				str.append("||" + s);
+			for(String a : msgs)
+				str.append("||" + a);
 			
 			String msg = str.toString() + "||";
 			
-			// String buffer
-			String s = null;
-			
 			// Wait for ready...
-			while(!((s = in.readLine()).equals("READY"))) System.out.println("Waiting for ready state...");
+			while(!((response = in.readLine()).equals("READY"))) System.out.println("Waiting for ready state...");
 			
 			// Write message to NXT brick
 			this.out.writeBytes(msg+"\n");
 			this.out.flush();
 			
 			// Wait for response
-			while((s = in.readLine()).equals(null)) System.out.println("Waiting for response...");
-			
-			// Return response
-			return s;
+			while((response = in.readLine()).equals(null)) System.out.println("Waiting for response...");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -134,6 +128,6 @@ public class PCConn {
 			}
 		}
 		
-		return "NO RESPONSE/ERROR";
+		return response;
 	}
 }
