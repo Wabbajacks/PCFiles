@@ -17,6 +17,8 @@ public class PCConn {
 	private BufferedReader in;
 	private DataOutputStream out;
 	private NXTConnector conn;
+	private String address;
+	private String response;
 	
 	public PCConn() {
 		new PCConn("NONE");
@@ -32,22 +34,7 @@ public class PCConn {
 	 * @throws IOException If in-/output stream error occurs.
 	 */
 	public PCConn(String address) {
-		conn = new NXTConnector();
-		
-		if(address.equals("NONE") || address.equals(null)) address = "";
-		
-		// Connect to an NXT brick via bluetooth
-		boolean connected = conn.connectTo("btspp://" + address);
-		
-		// If connection can't be established exit and print error.
-		if (!connected) {
-			System.err.println("Failed to connect to NXT, exiting.");
-			System.exit(1);
-		}
-		
-		// Open streams for communication
-		in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		out = new DataOutputStream(conn.getOutputStream());
+		if(address.equals("NONE") || address.equals(null)) this.address = "";
 	}
 	
 	/**
@@ -95,19 +82,38 @@ public class PCConn {
 	 * @return Response from NXT brick.
 	 */
 	public String sendMsg(String[] msgs) {
+		conn = new NXTConnector();
+		
+		// Connect to an NXT brick via bluetooth
+		boolean connected = conn.connectTo("btspp://");
+		
+		// If connection can't be established exit and print error.
+		if (!connected) {
+			System.err.println("Failed to connect to NXT, exiting.");
+			System.exit(1);
+		}
+		
+		// Open streams for communication
+		in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		out = new DataOutputStream(conn.getOutputStream());
+		
 		try {
 			StringBuilder str = new StringBuilder();
 			
 			for(String s : msgs)
 				str.append("||" + s);
 			
-			String msg = str.toString();
-			
-			// Write message to NXT brick
-			this.out.writeBytes(msg);
+			String msg = str.toString() + "||";
 			
 			// String buffer
 			String s = null;
+			
+			// Wait for ready...
+			while(!((s = in.readLine()).equals("READY"))) System.out.println("Waiting for ready state...");
+			
+			// Write message to NXT brick
+			this.out.writeBytes(msg+"\n");
+			this.out.flush();
 			
 			// Wait for response
 			while((s = in.readLine()).equals(null)) System.out.println("Waiting for response...");
@@ -115,7 +121,17 @@ public class PCConn {
 			// Return response
 			return s;
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				out.writeBytes("END\n");
+				
+				this.out.close();
+				this.in.close();
+				this.conn.close();
+			} catch(IOException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		
 		return "NO RESPONSE/ERROR";
