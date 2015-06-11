@@ -34,27 +34,12 @@ public class PCConn {
 	 * @throws IOException If in-/output stream error occurs.
 	 */
 	public PCConn(String address) {
-		if(address.equals("NONE") || address.equals(null)) this.address = "";
+		if(address.equals("NONE") || address.equals(null))
+			this.address = "";
+		else
+			this.address = address;
 	}
-	
-	/**
-	 * Close established connection.<br><br>
-	 * 
-	 * Will notify the NXT that the connection is terminating before closing.
-	 * 
-	 * @throws IOException if no connection is established or some unknown error occurs during communication.
-	 */
-	public void closeConn() {
-		try {
-			out.writeBytes("END\n");
-			
-			this.out.close();
-			this.in.close();
-			this.conn.close();
-		} catch(IOException e) {
-			System.out.println(e.getMessage());
-		}
-	}
+
 	
 	/**
 	 * Send a message to the NXT brick.<br>
@@ -85,7 +70,7 @@ public class PCConn {
 		conn = new NXTConnector();
 		
 		// Connect to an NXT brick via bluetooth
-		boolean connected = conn.connectTo("btspp://");
+		boolean connected = conn.connectTo("btspp://" + address);
 		
 		// If connection can't be established exit and print error.
 		if (!connected) {
