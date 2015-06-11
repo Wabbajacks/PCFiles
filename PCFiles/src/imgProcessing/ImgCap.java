@@ -1,4 +1,5 @@
 package imgProcessing;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.opencv.core.Core;
@@ -11,13 +12,19 @@ public class ImgCap {
 	
 	public static void main( String[] args )
 	{
+		ImgCap obj = new ImgCap();
+		obj.picAnal();
+	}
+	
+	public ArrayList<Point2D> picAnal() {
+		ArrayList<Point2D> result = new ArrayList<Point2D>();
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		int boldLowValue[] = {180, 190, 190};
 		int boldHighValue[] = {252, 252, 252};
 		int groundLowValue[] = {90, 90, 90};
 		int groundHighValue[] = {90, 90, 90};
-		int robotBackHighValue[] = {90, 90, 90};
-		int robotBackLowValue[] = {90, 90, 90};
+		int robotBackHighValue[] = {50, 100, 240};
+		int robotBackLowValue[] = {20, 80, 200};
 		int robotFrontHighValue[] = {65, 120, 50};
 		int robotFrontLowValue[] = {50, 90, 30};
 		int obstacleHighValue[] = {55, 65, 145};
@@ -35,7 +42,7 @@ public class ImgCap {
 		int rows = image.height();
 		int cols = image.width();
 		int[] robotFront = {0,0,0};
-//		System.out.println(cols+" "+rows);
+		int[] robotBack = {0,0,0};
 		ArrayList<Integer[]> bolde = new ArrayList<Integer[]>();
 //		ArrayList<Integer[]> obstacle = new ArrayList<Integer[]>();
 
@@ -43,7 +50,6 @@ public class ImgCap {
 		int maxY = 0;
 		int minX = 480;
 		int maxX = 0;
-//		System.out.println(image.dump());
 		for (int i = 0; i <rows; i=i+2) {
 			for (int j = 0;j<cols;j=j+2){
 				double color[] = {image.get(i,j)[0],image.get(i,j)[1],image.get(i,j)[2]};
@@ -70,7 +76,9 @@ public class ImgCap {
 						}
 					}
 				} else if (color[0] > robotBackLowValue[0] && color[1] > robotBackLowValue[1] && color[2] > robotBackLowValue[2] && color[0] < robotBackHighValue[0] && color[1] < robotBackHighValue[1] && color[2] < robotBackHighValue[2]) {
-				
+					robotBack[0] +=j;
+					robotBack[1] +=i;
+					robotBack[2]++;
 				} else if (color[0] > robotFrontLowValue[0] && color[1] > robotFrontLowValue[1] && color[2] > robotFrontLowValue[2] && color[0] < robotFrontHighValue[0] && color[1] < robotFrontHighValue[1] && color[2] < robotFrontHighValue[2]) {
 					robotFront[0] += j;
 					robotFront[1] += i;
@@ -79,6 +87,7 @@ public class ImgCap {
 			}
 		}
 		System.out.println(minX+","+minY+" "+maxX+","+maxY);
+		//kvadrant bolde udregninger
 //		int q0=0, q1=0, q2=0, q3=0;
 //		for(int i=0;i<bolde.size();i++){
 //			if (q0 == 0 && bolde.get(i)[0] <= minY[0] && bolde.get(i)[1] <= minX[1]) {
@@ -92,18 +101,16 @@ public class ImgCap {
 //			}
 //		}
 		
-//		for (int i = 0;i<bolde.size();i++) {
-//			System.out.println(bolde.get(i)[0]+","+bolde.get(i)[1]);
-//		}
-		
-//		System.out.print(q0+" "+q1+" "+q2+" "+q3);
-		Graph hej = new Graph(bolde);
-		ArrayList<String> returnvalue = hej.filterBalls();
-		for(int i=0;i<returnvalue.size();i++){
-			System.out.println(returnvalue.get(i));
+		BallGraph ballCalculator = new BallGraph(bolde);
+		ArrayList<Point2D> ballSet = ballCalculator.filterBalls();
+		for(int i=0;i<ballSet.size();i++){
+			System.out.println(ballSet.get(i));
 		}
-		System.out.println("RobotFront, X: "+robotFront[0]/robotFront[2]+" Y: "+robotFront[1]/robotFront[2]);
+		Point2D robotF = new Point2D.Double(robotFront[0]/robotFront[2],robotFront[1]/robotFront[2]);
+		Point2D robotB = new Point2D.Double(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
+		System.out.println("RobotFront, X: "+robotF.getX()+" Y:"+robotF.getY());
+		System.out.println("RobotBack, X: "+robotB.getX()+" Y:"+robotB.getY());
+		return result;
 	}
-	
 	
 }

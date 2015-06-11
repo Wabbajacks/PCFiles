@@ -1,13 +1,14 @@
 package imgProcessing;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.LinkedList;
+
 
 public class BallGraph {
 	private Node[] nodes;
 	
 	@SuppressWarnings("unchecked")
-	public Graph(ArrayList<Integer[]> bolde) {
+	public BallGraph(ArrayList<Integer[]> bolde) {
 		int size = bolde.size();
 		nodes = new Node[size];
 		Integer[] temp;
@@ -34,9 +35,9 @@ public class BallGraph {
 		
 	}
 	
-	public ArrayList<String> filterBalls() {
+	public ArrayList<Point2D> filterBalls() {
 		int size = nodes.length;
-		ArrayList<String> balls = new ArrayList<String>();
+		ArrayList<Point2D> balls = new ArrayList<Point2D>();
 		for(int i=0;i<size;i++){
 			Node temp = nodes[i];
 			if(!temp.isMarked()) {
@@ -45,7 +46,7 @@ public class BallGraph {
 					coords = markNeighbours(temp, coords);
 //					System.out.println(coords[0]+" "+coords[1] +" "+coords[2]);
 					if(coords[2] > 5) {
-					balls.add(coords[0]/coords[2]+";;"+coords[1]/coords[2]);
+					balls.add(new Point2D.Double(coords[0]/coords[2],coords[1]/coords[2]));
 					}
 				}
 			}
