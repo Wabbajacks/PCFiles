@@ -64,20 +64,15 @@ public class PrepareStatement {
 	 * @return An array containing the command and its timeframe in the following array index.
 	 */
 	public static String[] prepCmds(String msg) {
-		ArrayList<String> res = new ArrayList<String>();
+		String[] res;
 		
-		String tmp = msg.substring(2);
-		String[] tmp2;
+		String s = msg.substring(2, msg.length()-2);
 		
-		while(!tmp.isEmpty()) {
-			tmp2 = tmp.split(";;");
-			res.add(tmp2[0]);
-			tmp = tmp2[1];
-			tmp2 = tmp.split("||");
-			tmp = tmp2[1];
-		}
+		res = s.split("\\|\\|");
 		
-		return res.toArray(new String[res.size()]);
+		for(int i = 0; i < res.length; i++) res[i] = res[i].replace(";;", " ");
+		
+		return res;
 	}
 
 }
