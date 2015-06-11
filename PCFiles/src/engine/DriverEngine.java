@@ -2,7 +2,7 @@ package engine;
 
 import java.awt.geom.Point2D;
 
-import connection.PCConn;
+import communication.PCConn;
 
 /**
  * DriverEngine is the controller class for the PC part of the project

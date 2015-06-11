@@ -1,6 +1,6 @@
 package test;
 
-import connection.PCConn;
+import communication.PCConn;
 
 public class BasicMovementTest {
 	public static void main(String[] args) {

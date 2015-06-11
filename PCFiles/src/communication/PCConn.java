@@ -1,4 +1,4 @@
-package connection;
+package communication;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
