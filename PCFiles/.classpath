@@ -9,5 +9,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="bluecove-2.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="C:/opencv2/opencv/build/java/opencv-2410.jar"/>
+	<classpathentry kind="lib" path="opencv-2410.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
