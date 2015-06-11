@@ -6,13 +6,12 @@ public class PrepareStatement {
 	/**
 	 * Takes an array of commands with their respective timeframes and converts them into a string.<br><br>
 	 * 
-	 * The layout of the array must be commands in the even index numbers, while the trailing odd index is<br>
-	 * the command's timeframe.<br><br>
+	 * The layout of array must be command followed by the timeframe, separated by a space.
 	 * 
 	 * E.g.
 	 * <ul>
-	 * <li><code>[0] -> cmd, [1] -> timeframe</code></li>
-	 * <li><code>[2] -> cmd, [2] -> timeframe</code></li>
+	 * <li><code>[0] -> cmd timeframe</code></li>
+	 * <li><code>[1] -> cmd timeframe</code></li>
 	 * </ul>
 	 * 
 	 * The returned string must be with the format:<br><br>
@@ -50,18 +49,17 @@ public class PrepareStatement {
 	 * "||cmd;;timeframe||cmd;;timeframe||etc...||"<br>
 	 * The string must start with "||" and end with "||"<br><br>
 	 * 
-	 * The returned array is given as a command in the even index numbers<br>
-	 * with the timeframe for the command in the following odd index number.<br>
+	 * The returned array is given as command with the timeframe in the same index, separated by a space.<br>
 	 * E.g.:
 	 * 
 	 * <ul>
-	 * <li>[0] -> "C_FW", [1] -> "5000"</li>
-	 * <li>[2] -> "C_HL", [3] -> "0"</li>
+	 * <li>[0] -> "C_FW 5000"</li>
+	 * <li>[1] -> "C_HL 0"</li>
 	 * </ul>
 	 * 
+	 * 
 	 * @param msg String containing the commands and their timeframes.
-	 * @return 
-	 * @return An array containing the command and its timeframe in the following array index.
+	 * @return An array containing the command and its timeframe in the the same index, separated by a space.
 	 */
 	public static String[] prepCmds(String msg) {
 		String[] res;
