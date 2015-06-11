@@ -1,17 +1,65 @@
 package engine;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 // Name to be changed
 /**
  * AlgoEngine controls which instruction the robot should be given 
  * based on the coordinates sent by the cam Part
+ * 
+ * Program StartAlgoEngine: (if there is still balls within the "middle" of the field
+ * Point2D ballCoordinateArray		(b_x, b_y)
+ * Point2D robotCoordinateArray		(r_x, r_y)
+ * 
+ * String robotCommandArray
+ * 
+ * integer targetBall				(Array number indicator)
+ * integer robotDirection			(0:-y		1:-x 		2:+y 		3:+x	when going forward)
+ * double distance					(distance from robot to ball)
+ * 
+ * 
+ * 
+ * targetBall = findNearestBall(ballCoordinateArray, robotCoordinateArray)
+ * robot Direction = findRobotDirection(robotCoordinateArray)
+ * 
+ * 	if(r_x != b_x)
+ * 		if(r_x < b_x)
+ * 			change robotDirection to 3
+ * 			store changeDirectionCommand to robotCommandArray 
+ * 		else
+ * 			change robotDirection to 1
+ * 			store chanceDirectionCommand to robotCommandArray
+ * 		end if
+ * 
+ * 		calcDriveTime()
+ * 		store forward(time) to robotCommandArray
+ * 	end if
+ * 
+ * 	if(r_y != b_y)
+ * 		if(r_y < b_y)
+ * 			change robotDirection to 2
+ * 			store chanceDirectionCommand to robotCommandArray
+ * 		else
+ * 			chance robotDirection to 0 
+ * 			store chanceDirectionCommand to robotCommandArray
+ * 		end if
+ * 
+ * 		calcDriveTime()
+ * 		store forward(time) to robotCommandArray
+ * 	end if
+ * 
+ *  return robotCommandArray
+ *  
  * @author Anders
  *
  */
 public class AlgoEngine {
 	int targetBall;
+	int robotDirection;
 	double distance;
+	List<String> commands;
 	/* TODO:
 	 * Runs all the algorithms
 	 *
@@ -31,7 +79,9 @@ public class AlgoEngine {
 	public AlgoEngine(){
 		targetBall = 0;
 		distance = 0;
-	}
+		robotDirection = 0;
+		commands = new ArrayList<String>();
+	} 
 	
 	/**
 	 * getCoodinates
@@ -66,13 +116,36 @@ public class AlgoEngine {
 	}
 	
 	/**
+	 * robotDirection
+	 * determines which direction the robot is looking
+	 * 
+	 * @param robot - Point2D Array containing the robots coordinates
+	 * @return the integer value of the direction 	(0:-y		1:-x 		2:+y 		3:+x	when going forward)
+	 */
+	private int robotDirection(Point2D[] robot){
+		/*	check which front back direction has the biggest difference to determine which axis the robot is on	 */
+		if(Math.abs(robot[0].getX() - robot[1].getX()) > Math.abs(robot[0].getY() - robot[1].getY()) ){
+			/* frontX smaller than backX then direction is 'LEFT' else ... */
+			if(robot[0].getX() < robot[1].getX())	return 1;
+			/* ... direction is 'RIGHT' */
+			else return 3;
+		} else {
+			/* frontY smaller than backY then direction is 'DOWN' else ... */
+			if(robot[0].getY() < robot[1].getY())	return 0;
+			/* ... direction is 'UP' */
+			else return 2;
+		}
+	}
+	
+	/**
 	 * getInstruction
 	 * if the getCoordinates have been executed it will return the right info.
 	 *  
 	 * @return String array with Instructions to robot.
 	 */
 	public String[] getInstruction(){
-		return null;
+		
+		return (String[]) commands.toArray();
 	}
 	
 }
