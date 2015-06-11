@@ -31,9 +31,13 @@ public class PrepareStatement {
 			tmp = cmdList[i].split(" ");
 			list += tmp[0];
 			list += ";;";
-			list += tmp[1];
+			if(tmp.length == 1) {
+				list += "0";
+			}
+			else {
+				list += tmp[1];
+			}
 			list += "||";
-			i++;
 		}
 		
 		return list;
@@ -62,18 +66,15 @@ public class PrepareStatement {
 	public static String[] prepCmds(String msg) {
 		ArrayList<String> res = new ArrayList<String>();
 		
-		int start = 0;
+		String tmp = msg.substring(2);
+		String[] tmp2;
 		
-		while(start < msg.lastIndexOf("||")) {
-			int i = msg.indexOf(";;", start);
-			int j = msg.indexOf("||", i);
-			
-			if(i != -1) {
-				res.add(msg.substring((start+2), i));
-				res.add(msg.substring((i+2), j));
-				
-				start = msg.indexOf("||", i);
-			}
+		while(!tmp.isEmpty()) {
+			tmp2 = tmp.split(";;");
+			res.add(tmp2[0]);
+			tmp = tmp2[1];
+			tmp2 = tmp.split("||");
+			tmp = tmp2[1];
 		}
 		
 		return res.toArray(new String[res.size()]);
