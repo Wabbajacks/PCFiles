@@ -70,7 +70,7 @@ public class PCConn {
 		conn = new NXTConnector();
 		
 		// Connect to an NXT brick via bluetooth
-		boolean connected = conn.connectTo("btspp://" + address);
+		boolean connected = conn.connectTo("btspp://");
 		
 		// If connection can't be established exit and print error.
 		if (!connected) {
@@ -89,10 +89,7 @@ public class PCConn {
 				str.append("||" + a);
 			
 			String msg = str.toString() + "||";
-			
-			// Wait for ready...
-			while(!((response = in.readLine()).equals("READY"))) System.out.println("Waiting for ready state...");
-			
+						
 			// Write message to NXT brick
 			this.out.writeBytes(msg+"\n");
 			this.out.flush();
@@ -111,6 +108,12 @@ public class PCConn {
 			} catch(IOException e) {
 				System.out.println(e.getMessage());
 			}
+		}
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		
 		return response;
