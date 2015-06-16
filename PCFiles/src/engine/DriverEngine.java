@@ -1,7 +1,7 @@
 package engine;
 
 import java.awt.geom.Point2D;
-
+import imgProcessing.ImgInfo;
 import communication.PCConn;
 
 /**
@@ -12,6 +12,7 @@ import communication.PCConn;
 public class DriverEngine {
 	private PCConn con;
 	private AlgoEngine algo;
+	private ImgInfo cam;
 	/* TODO:
 	 * The DriverEngine runs the show
 	 * 
@@ -24,8 +25,9 @@ public class DriverEngine {
 	 * 
 	 */
 	public DriverEngine(){
-//		con = new PCConn();
+		con = new PCConn();
 		algo = new AlgoEngine();
+		cam = new ImgInfo();
 		engine();
 	}
 
@@ -34,8 +36,9 @@ public class DriverEngine {
 	}
 	
 	private void engine(){
-	    Point2D[] ballCoordinates = new Point2D[2];
+	    Point2D[] ballCoordinates = new Point2D[4];
 	    Point2D[] robotCoordinates = new Point2D[2];
+	    Point2D[] wallCoordinates = new Point2D[4];
 //		String[] msg = null;
 		
 //		camCoordinates = new Point2D[4];
@@ -43,27 +46,30 @@ public class DriverEngine {
 	    robotCoordinates[0] = new Point2D.Double(230, 120);
 	    robotCoordinates[1] = new Point2D.Double(200, 122);
 	    
-		ballCoordinates[0] = new Point2D.Double(1, 2);
-		ballCoordinates[1] = new Point2D.Double(2000, 3000);
-//		ballCoordinates[2] = new Point2D.Double(43, 87);
-//		ballCoordinates[3] = new Point2D.Double(123, 453);
+		ballCoordinates[0] = new Point2D.Double(40, 30);
+		ballCoordinates[1] = new Point2D.Double(800, 12);
+		ballCoordinates[2] = new Point2D.Double(43, 87);
+		ballCoordinates[3] = new Point2D.Double(123, 453);
+		
+		wallCoordinates [0] = new Point2D.Double(0, 1000);
+		wallCoordinates [1] = new Point2D.Double(1000, 1000);
+		wallCoordinates [2] = new Point2D.Double(0, 0);
+		wallCoordinates [3] = new Point2D.Double(1000, 0);
 		
 		while(true){
-			algo.run(ballCoordinates, robotCoordinates);
+			algo.run(ballCoordinates, robotCoordinates, wallCoordinates);
 			System.out.println("commands");
 			for (String s : algo.getInstruction()){
 				System.out.print(s + " ");
 			}
 			System.out.println();
-//			con.sendMsg(algo.getInstruction());
+			con.sendMsg(algo.getInstruction());
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
 	}
 }
