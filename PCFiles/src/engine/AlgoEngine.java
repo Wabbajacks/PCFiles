@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// Name to be changed
 /**
  * AlgoEngine controls which instruction the robot should be given 
  * based on the coordinates sent by the cam Part
@@ -17,6 +16,7 @@ public class AlgoEngine {
 	int targetBall;
 	int robotDirection;
 	int tolerance;
+	boolean sweepMode;
 	
 	int startPointer;
 	Point2D robot_start;
@@ -88,6 +88,7 @@ public class AlgoEngine {
 		distance = 0;
 		robotDirection = 0;
 		tolerance = 25;
+		sweepMode = false;
 		
 		startPointer = 0;
 		robot_start = new Point2D.Double(0, 0);
@@ -102,11 +103,11 @@ public class AlgoEngine {
 	 * @param balls - Point2D[] of all the balls coordinates
 	 * @param robot - Point2D[] of the robots coordinates
 	 */
-	public String[] run(Point2D[] balls, Point2D[] robot){
+	public String[] run(Point2D[] balls, Point2D[] robot, Point2D[] wall){
 		commands.clear();
 		
 		if (startPointer < 2)	setupStep(robot);
-		if (startPointer > 1)	firstSteps(balls, robot);
+		if (startPointer > 1)	firstSteps(balls, robot, wall);
 		
 		return getInstruction();
 	}
@@ -120,7 +121,7 @@ public class AlgoEngine {
 	private void setupStep(Point2D[] robot){
 		int t = 2000;
 		if (startPointer == 0){
-			commands.add("C_FW " + (t));
+			commands.add("C_FW;;" + (t));
 			robot_start = robot[0];
 			System.out.println("First setupState");
 		} else {
@@ -142,69 +143,86 @@ public class AlgoEngine {
 	 * @param balls - Point2D array of all the balls locations on the field.
 	 * @param robot - Point2D array of the robot's location, starting with the front of the robot.
 	 */
-	private void firstSteps(Point2D[] balls, Point2D[] robot){
-		setNearestBall(balls, robot);
+	private void firstSteps(Point2D[] balls, Point2D[] robot, Point2D[] wall){
+		setNearestBall(balls, robot, wall);
 		robotDirection = robotDirection(robot);
+		if (targetBall == -1){ 
+			sweepMode = true;
+			System.out.println("SweepMode on");
+		}
 
 		System.out.println("robotdirection: " + robotDirection);
 		
 		System.out.println(targetBall);
-		
-		/* if robot_x fits ball_x do following ...*/
-		if ( !((robot[0].getX() - tolerance) <= balls[targetBall].getX() && balls[targetBall].getX() <= (robot[0].getX() + tolerance)) ){
-			if( robot[0].getX() < balls[targetBall].getX()){
-				/* ... chance robotDirection to 3 */
-				for (String s : changeDirection(3, robotDirection)){
-					commands.add(s);
+		if(!sweepMode){
+			/* if robot_x doesn't fit ball_x do following ...*/
+			if ( !((robot[0].getX() - tolerance) <= balls[targetBall].getX() && balls[targetBall].getX() <= (robot[0].getX() + tolerance)) ){
+				if( robot[0].getX() < balls[targetBall].getX()){
+					/* ... chance robotDirection to 3 */
+					for (String s : changeDirection(3, robotDirection)){
+						commands.add(s);
+					}
+					robotDirection = 3;
+				} else {
+					/* ... chance robotDirection to 1 */
+					for (String s : changeDirection(1, robotDirection)){
+						commands.add(s);
+					}
+					robotDirection = 1;
 				}
-				robotDirection = 3;
-			} else {
-				/* ... chance robotDirection to 1 */
-				for (String s : changeDirection(1, robotDirection)){
-					commands.add(s);
-				}
-				robotDirection = 1;
+				/* and add how far to drive forward*/
+				commands.add("C_FW " + calcDriveTime(Math.abs(robot[0].getX() - balls[targetBall].getX())));
 			}
-			/* and add how far to drive forward*/
-			commands.add("C_FW " + calcDriveTime(Math.abs(robot[0].getX() - balls[targetBall].getX())));
-		}
-		/* if robot_y fits ball_y do following ...*/
-		if ( !((robot[0].getY() - tolerance) <= balls[targetBall].getY() && balls[targetBall].getY() <= (robot[0].getY() + tolerance)) ){
-			if( robot[0].getY() < balls[targetBall].getX()){
-				/* ... change robotDirection to 2*/
-				for (String s : changeDirection(2, robotDirection)){
-					commands.add(s);
+			/* if robot_y doesn't fit ball_y do following ...*/
+			if ( !((robot[0].getY() - tolerance) <= balls[targetBall].getY() && balls[targetBall].getY() <= (robot[0].getY() + tolerance)) ){
+				if( robot[0].getY() < balls[targetBall].getX()){
+					/* ... change robotDirection to 2*/
+					for (String s : changeDirection(2, robotDirection)){
+						commands.add(s);
+					}
+					robotDirection = 2;
+				} else {
+					/* ... change robotDirection to 0*/
+					for (String s : changeDirection(0, robotDirection)){
+						commands.add(s);
+					}
+					robotDirection = 0;
 				}
-				robotDirection = 2;
-			} else {
-				/* ... change robotDirection to 0*/
-				for (String s : changeDirection(0, robotDirection)){
-					commands.add(s);
-				}
-				robotDirection = 0;
+				
+				/* and add how far to drive forward*/
+				commands.add("C_FW;;" + calcDriveTime(Math.abs(robot[0].getY() - balls[targetBall].getY())));
 			}
-			
-			/* and add how far to drive forward*/
-			commands.add("C_FW " + calcDriveTime(Math.abs(robot[0].getY() - balls[targetBall].getY())));
 		}
 	}
 
 	/**
 	 * setNearestBall
+	 * which isn't within the reach of the boarders
 	 * 
 	 * @param balls - Point2D array of all the balls locations on the field.
 	 * @param robot - Point2D array of the robot's location, starting with the front of the robot.
 	 */
-	private void setNearestBall(Point2D[] balls, Point2D[] robot){
-		targetBall = 0;
-		distance = 1000;
-
+	private void setNearestBall(Point2D[] balls, Point2D[] robot, Point2D[] wall){
+		targetBall = -1;
+		distance = robot[0].distance(balls[1]);
+		int NGD = 20 ;
+		
 		for(int i = 0 ; i < balls.length ; i++){
 			double tempDist = robot[0].distance(balls[i]);
 
-			if(distance > tempDist){
+			if(distance >= tempDist){
+				if(		Math.abs(balls[i].getX() - wall[0].getX()) > NGD &&
+						Math.abs(balls[i].getY() - wall[0].getY()) > NGD &&
+						Math.abs(balls[i].getX() - wall[1].getX()) > NGD &&
+						Math.abs(balls[i].getY() - wall[1].getY()) > NGD &&
+						Math.abs(balls[i].getX() - wall[2].getX()) > NGD &&
+						Math.abs(balls[i].getY() - wall[2].getY()) > NGD &&
+						Math.abs(balls[i].getX() - wall[3].getX()) > NGD &&
+						Math.abs(balls[i].getY() - wall[3].getY()) > NGD 
+						){	
 				targetBall = i;
 				distance = tempDist;
+				}
 			}
 		}
 	}
@@ -242,26 +260,26 @@ public class AlgoEngine {
 
 		switch (switchChoose){
 		case -3: /* RIGHT */
-			tempList.add("C_HR 0");
+			tempList.add("C_HR;;0");
 			break;
 		case -2: /* 180 */
-			tempList.add("C_HR 0");
-			tempList.add("C_HR 0");
+			tempList.add("C_HR;;0");
+			tempList.add("C_HR;;0");
 			break;
 		case -1: /* LEFT */
-			tempList.add("C_HL 0");
+			tempList.add("C_HL;;0");
 			break;
 		case 0: /* NONE */
 			break;
 		case 1: /* RIGHT */
-			tempList.add("C_HR 0");
+			tempList.add("C_HR;;0");
 			break;
 		case 2: /* 180 */
-			tempList.add("C_HR 0");
-			tempList.add("C_HR 0");
+			tempList.add("C_HR;;0");
+			tempList.add("C_HR;;0");
 			break;
 		case 3: /* LEFT */
-			tempList.add("C_HL 0");
+			tempList.add("C_HL;;0");
 			break;
 		default:
 			System.out.println("default");
