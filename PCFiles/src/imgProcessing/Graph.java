@@ -4,11 +4,11 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 
-public class BallGraph {
+public class Graph {
 	private Node[] nodes;
 	
 	@SuppressWarnings("unchecked")
-	public BallGraph(ArrayList<Integer[]> bolde) {
+	public Graph(ArrayList<Integer[]> bolde) {
 		int size = bolde.size();
 		nodes = new Node[size];
 		Integer[] temp;

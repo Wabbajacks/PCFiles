@@ -20,7 +20,7 @@ public class ImgCap {
 		obj.picAnal();
 	}
 	
-	private ImgInfo picAnal() {
+	public ImgInfo picAnal() {
 		//Compairison values
 		int boldLowValue[] = {180, 190, 190};
 		int boldHighValue[] = {252, 252, 252};
@@ -128,8 +128,8 @@ public class ImgCap {
 		}
 		
 		//Calculating the coordinates for all balls
-		BallGraph ballCalculator = new BallGraph(balls);
-		ArrayList<Point2D> ballSet = ballCalculator.filterBalls();
+		Graph ballGraph = new Graph(balls);
+		ArrayList<Point2D> ballSet = ballGraph.filterBalls();
 
 		//obstacle outer coordinates in P2D
 		Point2D obstacleTopLeft = new Point2D.Double(obstacleMinX,obstacleMinY);
@@ -150,17 +150,39 @@ public class ImgCap {
 		Point2D edgeBottomLeft = new Point2D.Double(frameEdges[0],frameEdges[3]);
 		Point2D edgeBottomRight = new Point2D.Double(frameEdges[2],frameEdges[3]);
 		
+		//goal coordinates
+		//leftGoal is always the small 8cm goal
+		int k = 11;
+		double leftGoalCenter = (edgeBottomLeft.getY()-edgeTopLeft.getY())/2+edgeTopLeft.getY();
+		Point2D leftGoalTop = new Point2D.Double(edgeBottomLeft.getX(),leftGoalCenter-k);
+		Point2D leftGoalBottom = new Point2D.Double(edgeBottomLeft.getX(),leftGoalCenter+k);
+		
+		//rightGoal is always the big 20cm goal
+		k = 26;
+		double rightGoalCenter = (edgeBottomRight.getY()-edgeTopRight.getY())/2+edgeTopRight.getY();
+		Point2D rightGoalTop = new Point2D.Double(edgeBottomRight.getX(),rightGoalCenter-k);
+		Point2D rightGoalBottom = new Point2D.Double(edgeBottomRight.getX(),rightGoalCenter+k);
+		System.out.println("Left goal:");
+		System.out.println(leftGoalTop);
+		System.out.println(leftGoalBottom);
+		
+		System.out.println("Right goal:");
+		System.out.println(rightGoalTop);
+		System.out.println(rightGoalBottom);
+		
+		
 		//prints for testing
+		System.out.println("printing balls");
 		for(int i=0;i<ballSet.size();i++){
 			System.out.println(ballSet.get(i));
 		}
 		System.out.println("RobotFront, X: "+robotF.getX()+" Y:"+robotF.getY());
 		System.out.println("RobotBack, X: "+robotB.getX()+" Y:"+robotB.getY());
 		System.out.println("obstacle: top left:"+obstacleTopLeft+" bottom Right: "+obstacleBottomRight);
-		System.out.println("top let: " + edgeTopLeft + " top right: " + edgeTopRight + "bottom left: " + edgeBottomLeft + "bottom right: " + edgeBottomRight);
+		System.out.println("top left: " + edgeTopLeft + " top right: " + edgeTopRight + "bottom left: " + edgeBottomLeft + "bottom right: " + edgeBottomRight);
 		
 		//return an info object
-		return new ImgInfo(ballSet,new Point2D[]{obstacleTopLeft, obstacleBottomRight},new Point2D[]{edgeTopLeft, edgeTopRight, edgeBottomLeft, edgeBottomRight},new Point2D[]{robotF,robotB});
+		return new ImgInfo(ballSet,new Point2D[]{obstacleTopLeft, obstacleBottomRight},new Point2D[]{edgeTopLeft, edgeTopRight, edgeBottomLeft, edgeBottomRight},new Point2D[]{robotF,robotB}, new Point2D[]{leftGoalTop,leftGoalBottom,rightGoalTop,rightGoalBottom});
 	}
 	
 	//Follow methods determinate the x and y coordinates for the frame
@@ -205,5 +227,24 @@ public class ImgCap {
 //		} else if (q3 == 0 && bolde.get(i)[0] > minY[0] && bolde.get(i)[1] <= minX[1]) {
 //			q3 = 1;
 //		}
+//	}
+//	private int locateGoal(HashMap<Integer, Integer> edges) {
+//		int minVal = 640;
+//		int coordMin = 0;
+//		int maxVal = 0;
+//		int coordMax = 0;
+//		for(Entry<Integer, Integer> entry: edges.entrySet()) {
+//			if(entry.getValue() < minVal && entry.getValue() > 60) {
+//				minVal = entry.getValue();
+//				coordMin = entry.getKey();
+//			}
+//			if(entry.getValue() > maxVal && entry.getValue() > 100) {
+//				maxVal = entry.getValue();
+//				coordMax = entry.getKey();
+//			}
+//		}
+//		System.out.println(coordMin + " "+ minVal);
+//		System.out.println(coordMax + " " + maxVal);
+//		return  minVal;
 //	}
 }

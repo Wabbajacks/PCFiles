@@ -8,12 +8,14 @@ public class ImgInfo {
 	private Point2D[] obstacle;
 	private Point2D[] frame;
 	private Point2D[] robot;
+	private Point2D[] goals;
 	
-	public ImgInfo(ArrayList<Point2D> balls, Point2D[] obstacle, Point2D[] frame, Point2D[] robot) {
+	public ImgInfo(ArrayList<Point2D> balls, Point2D[] obstacle, Point2D[] frame, Point2D[] robot, Point2D[] goals) {
 		this.balls = balls;
 		this.obstacle = obstacle;
 		this.frame = frame;
 		this.robot = robot;
+		this.goals = goals;
 	}
 
 	public ArrayList<Point2D> getBalls() {
@@ -30,6 +32,10 @@ public class ImgInfo {
 
 	public Point2D[] getRobot() {
 		return robot;
+	}
+	
+	public Point2D[] getGoals() {
+		return goals;
 	}
 	
 }
