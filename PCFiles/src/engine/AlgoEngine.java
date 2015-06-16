@@ -87,7 +87,7 @@ public class AlgoEngine {
 		targetBall = 0;
 		distance = 0;
 		robotDirection = 0;
-		tolerance = 25;
+		tolerance = 15;
 		sweepMode = false;
 		
 		startPointer = 0;
@@ -119,19 +119,21 @@ public class AlgoEngine {
 	 * @param robot - robot Point2D coordinates
 	 */
 	private void setupStep(Point2D[] robot){
-		int t = 2000;
+		int t = 1000;
 		if (startPointer == 0){
 			commands.add("C_FW;;" + (t));
 			robot_start = robot[0];
 			System.out.println("First setupState");
 		} else {
 			double d = robot[0].distance(robot_start);
-			d = 67.2;
+//			d = 67.2;
 			move_constant = (t/d);
 			System.out.println("d: " + d);
 			System.out.println("t: " + t);
 			System.out.println("move_constant: " + move_constant);
 			System.out.println("Second setupState");
+			System.out.println("" + robot_start.toString());
+			System.out.println("" + robot[0].toString());
 		}
 		startPointer++;
 	}
@@ -204,7 +206,7 @@ public class AlgoEngine {
 	 */
 	private void setNearestBall(Point2D[] balls, Point2D[] robot, Point2D[] wall){
 		targetBall = -1;
-		distance = robot[0].distance(balls[1]);
+		distance = robot[0].distance(balls[0]);
 		int NGD = 20 ;
 		
 		for(int i = 0 ; i < balls.length ; i++){

@@ -42,7 +42,7 @@ public class ImgCap {
 //		image = Highgui.imread(filePath,1);
 
 		//picture from cam
-		VideoCapture test = new VideoCapture(0);
+		VideoCapture test = new VideoCapture(1);
 		test.read(image);
 		
 		
@@ -77,6 +77,7 @@ public class ImgCap {
 				tempArr[1] = y;
 				if (color[0] > boldLowValue[0] && color[1] > boldLowValue[1] && color[2] > boldLowValue[2] && color[0] < boldHighValue[0] && color[1] < boldHighValue[1] && color[2] < boldHighValue[2]) {
 					balls.add(tempArr);
+//					System.out.println(color[0]+" "+color[1]+" " +color[2] + " x:"+x+" y:"+y);
 				} else if(color[0] > obstacleLowValue[0] && color[1] > obstacleLowValue[1] && color[2] > obstacleLowValue[2] && color[0] < obstacleHighValue[0] && color[1] < obstacleHighValue[1] && color[2] < obstacleHighValue[2]) {					
 					if (x>100 && x<540 && y>100 && y<380){
 						if (x< obstacleMinX) {
@@ -140,7 +141,7 @@ public class ImgCap {
 		
 		//robot front and back coordinates in P2D
 		Point2D robotF = new Point2D.Double(robotFront[0]/robotFront[2],robotFront[1]/robotFront[2]);
-	//	Point2D robotB = new Point2D.Double(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
+		Point2D robotB = new Point2D.Double(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
 		
 		//Calculation of area cornors
 		frameEdges[0] = topOrLeftEdge(edgeLeft);
@@ -180,13 +181,13 @@ public class ImgCap {
 			System.out.println(ballSet.get(i));
 		}
 		System.out.println("RobotFront, X: "+robotF.getX()+" Y:"+robotF.getY());
-		//System.out.println("RobotBack, X: "+robotB.getX()+" Y:"+robotB.getY());
+		System.out.println("RobotBack, X: "+robotB.getX()+" Y:"+robotB.getY());
 		System.out.println("obstacle: top left:"+obstacleTopLeft+" bottom Right: "+obstacleBottomRight);
 		System.out.println("top left: " + edgeTopLeft + " top right: " + edgeTopRight + "bottom left: " + edgeBottomLeft + "bottom right: " + edgeBottomRight);
 		
 		//return an info object
-		//return null;
-		return new ImgInfo(ballSet,new Point2D[]{obstacleTopLeft, obstacleBottomRight},new Point2D[]{edgeTopLeft, edgeTopRight, edgeBottomLeft, edgeBottomRight},new Point2D[]{robotF,null}, new Point2D[]{leftGoalTop,leftGoalBottom,rightGoalTop,rightGoalBottom});
+//		return null;
+		return new ImgInfo(ballSet,new Point2D[]{obstacleTopLeft, obstacleBottomRight},new Point2D[]{edgeTopLeft, edgeTopRight, edgeBottomLeft, edgeBottomRight},new Point2D[]{robotF,robotB}, new Point2D[]{leftGoalTop,leftGoalBottom,rightGoalTop,rightGoalBottom});
 	}
 	
 	//Follow methods determinate the x and y coordinates for the frame

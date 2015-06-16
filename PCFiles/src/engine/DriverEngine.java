@@ -41,14 +41,11 @@ public class DriverEngine {
 		while(true){
 			ImgInfo camInfo = cam.picAnal();
 			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame());
-			System.out.println("" + algo.getInstruction());
-			con.sendMsg(algo.getInstruction());
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			for (String s : algo.getInstruction()){
+				System.out.print(s + " ");
 			}
+			System.out.println();
+			con.sendMsg(algo.getInstruction());
 		}
 		/* TO here */
 

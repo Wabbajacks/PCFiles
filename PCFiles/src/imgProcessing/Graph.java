@@ -40,6 +40,7 @@ public class Graph {
 		ArrayList<Point2D> balls = new ArrayList<Point2D>();
 		for(int i=0;i<size;i++){
 			Node temp = nodes[i];
+//			System.out.println(temp.getX()+ " " + temp.getY());
 			if(!temp.isMarked()) {
 				if(!temp.getNeighbours().isEmpty()) {
 					int[] coords = {0,0,0};
