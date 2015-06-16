@@ -41,6 +41,7 @@ public class DriverEngine {
 		while(true){
 			ImgInfo camInfo = cam.picAnal();
 			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame());
+			System.out.println("" + algo.getInstruction());
 			con.sendMsg(algo.getInstruction());
 			try {
 				Thread.sleep(2000);

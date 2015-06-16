@@ -38,12 +38,12 @@ public class ImgCap {
 		//The picture
 		Mat image = new Mat();		
 		//picture from file
-		String filePath = "C:\\cdio\\12.bmp";
-		image = Highgui.imread(filePath,1);
+//		String filePath = "C:\\cdio\\12.bmp";
+//		image = Highgui.imread(filePath,1);
 
 		//picture from cam
-//		VideoCapture test = new VideoCapture(0);
-//		test.read(image);
+		VideoCapture test = new VideoCapture(0);
+		test.read(image);
 		
 		
 		int rows = image.height();

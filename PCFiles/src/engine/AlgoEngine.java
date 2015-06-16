@@ -151,9 +151,9 @@ public class AlgoEngine {
 			System.out.println("SweepMode on");
 		}
 
-		System.out.println("robotdirection: " + robotDirection);
+		//System.out.println("robotdirection: " + robotDirection);
 		
-		System.out.println(targetBall);
+		//System.out.println(targetBall);
 		if(!sweepMode){
 			/* if robot_x doesn't fit ball_x do following ...*/
 			if ( !((robot[0].getX() - tolerance) <= balls[targetBall].getX() && balls[targetBall].getX() <= (robot[0].getX() + tolerance)) ){
