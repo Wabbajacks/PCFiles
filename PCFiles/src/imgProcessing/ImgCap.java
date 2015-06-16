@@ -20,6 +20,10 @@ public class ImgCap {
 		obj.picAnal();
 	}
 	
+	public ImgCap() {
+		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
+	}
+	
 	public ImgInfo picAnal() {
 		//Compairison values
 		int boldLowValue[] = {180, 190, 190};
