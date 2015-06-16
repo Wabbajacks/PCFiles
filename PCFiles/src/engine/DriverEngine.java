@@ -1,7 +1,8 @@
 package engine;
 
 import java.awt.geom.Point2D;
-import imgProcessing.ImgInfo;
+
+import imgProcessing.*;
 import communication.PCConn;
 
 /**
@@ -12,7 +13,7 @@ import communication.PCConn;
 public class DriverEngine {
 	private PCConn con;
 	private AlgoEngine algo;
-	private ImgInfo cam;
+	private ImgCap cam;
 	/* TODO:
 	 * The DriverEngine runs the show
 	 * 
@@ -27,35 +28,39 @@ public class DriverEngine {
 	public DriverEngine(){
 		con = new PCConn();
 		algo = new AlgoEngine();
-		cam = new ImgInfo();
+		cam = new ImgCap();
 		engine();
 	}
 
 	public static void main(String args[]){
 		new DriverEngine();
 	}
-	
+
 	private void engine(){
-	    Point2D[] ballCoordinates = new Point2D[4];
-	    Point2D[] robotCoordinates = new Point2D[2];
-	    Point2D[] wallCoordinates = new Point2D[4];
-//		String[] msg = null;
+		/* The opnly thing the engine should be running in a loop */ 
+		ImgInfo camInfo = cam.picAnal();
+		algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame());
+		con.sendMsg(algo.getInstruction());
+		/* TO here */
 		
-//		camCoordinates = new Point2D[4];
-	    
-	    robotCoordinates[0] = new Point2D.Double(230, 120);
-	    robotCoordinates[1] = new Point2D.Double(200, 122);
-	    
+		/* Dummy data test */ 
+		Point2D[] ballCoordinates = new Point2D[4];
+		Point2D[] robotCoordinates = new Point2D[2];
+		Point2D[] wallCoordinates = new Point2D[4];
+
+		robotCoordinates[0] = new Point2D.Double(230, 120);
+		robotCoordinates[1] = new Point2D.Double(200, 122);
+
 		ballCoordinates[0] = new Point2D.Double(40, 30);
 		ballCoordinates[1] = new Point2D.Double(800, 12);
 		ballCoordinates[2] = new Point2D.Double(43, 87);
 		ballCoordinates[3] = new Point2D.Double(123, 453);
-		
+
 		wallCoordinates [0] = new Point2D.Double(0, 1000);
 		wallCoordinates [1] = new Point2D.Double(1000, 1000);
 		wallCoordinates [2] = new Point2D.Double(0, 0);
 		wallCoordinates [3] = new Point2D.Double(1000, 0);
-		
+
 		while(true){
 			algo.run(ballCoordinates, robotCoordinates, wallCoordinates);
 			System.out.println("commands");
