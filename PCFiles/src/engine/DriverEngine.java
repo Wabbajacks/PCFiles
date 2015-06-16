@@ -37,14 +37,22 @@ public class DriverEngine {
 	}
 
 	private void engine(){
-		/* The opnly thing the engine should be running in a loop */ 
-		ImgInfo camInfo = cam.picAnal();
-		algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame());
-		con.sendMsg(algo.getInstruction());
+		/* The only thing the engine should be running in a loop */ 
+		while(true){
+			ImgInfo camInfo = cam.picAnal();
+			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame());
+			con.sendMsg(algo.getInstruction());
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		/* TO here */
-		
+
 		/* Dummy data test */ 
-		Point2D[] ballCoordinates = new Point2D[4];
+		/*		Point2D[] ballCoordinates = new Point2D[4];
 		Point2D[] robotCoordinates = new Point2D[2];
 		Point2D[] wallCoordinates = new Point2D[4];
 
@@ -75,6 +83,6 @@ public class DriverEngine {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		} */
 	}
 }

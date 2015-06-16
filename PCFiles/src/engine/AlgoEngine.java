@@ -171,7 +171,7 @@ public class AlgoEngine {
 					robotDirection = 1;
 				}
 				/* and add how far to drive forward*/
-				commands.add("C_FW " + calcDriveTime(Math.abs(robot[0].getX() - balls[targetBall].getX())));
+				commands.add("C_FW;;" + calcDriveTime(Math.abs(robot[0].getX() - balls[targetBall].getX())));
 			}
 			/* if robot_y doesn't fit ball_y do following ...*/
 			if ( !((robot[0].getY() - tolerance) <= balls[targetBall].getY() && balls[targetBall].getY() <= (robot[0].getY() + tolerance)) ){
