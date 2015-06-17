@@ -28,7 +28,7 @@ public class ImgCap {
 	
 	public ImgInfo picAnal() {
 		//Compairison values
-		int boldLowValue[] = {180, 190, 190};
+		int boldLowValue[] = {200, 200, 200};
 		int boldHighValue[] = {252, 252, 252};
 		int robotBackHighValue[] = {230, 175, 40};
 		int robotBackLowValue[] = {140, 110, 0};
@@ -44,7 +44,7 @@ public class ImgCap {
 //		image = Highgui.imread(filePath,1);
 
 		//picture from cam
-		VideoCapture webCam = new VideoCapture(0);
+		VideoCapture webCam = new VideoCapture(1);
 		webCam.read(image);
 		
 		Highgui.imwrite("images\\scrCap.jpg",image);
