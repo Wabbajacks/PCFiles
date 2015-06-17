@@ -29,9 +29,9 @@ public class ImgCap {
 		int boldLowValue[] = {180, 190, 190};
 		int boldHighValue[] = {252, 252, 252};
 		int robotBackHighValue[] = {230, 175, 40};
-		int robotBackLowValue[] = {180, 125, 5};
+		int robotBackLowValue[] = {140, 110, 0};
 		int robotFrontHighValue[] = {100, 255, 225};
-		int robotFrontLowValue[] = {15, 200, 170};
+		int robotFrontLowValue[] = {5, 165, 155};
 		int obstacleHighValue[] = {55, 65, 145};
 		int obstacleLowValue[] = {0, 0, 40};
 
@@ -42,7 +42,7 @@ public class ImgCap {
 //		image = Highgui.imread(filePath,1);
 
 		//picture from cam
-		VideoCapture webCam = new VideoCapture(1);
+		VideoCapture webCam = new VideoCapture(0);
 		webCam.read(image);
 		
 		
