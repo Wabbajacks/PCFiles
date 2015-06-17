@@ -6,8 +6,12 @@ import java.util.Map.Entry;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
+import org.opencv.imgproc.*;
 //import org.opencv
 
 
@@ -38,16 +42,22 @@ public class ImgCap {
 		int obstacleLowValue[] = {0, 0, 40};
 
 		//The picture
-		Mat image = new Mat();		
+		Mat image = new Mat();	
 		//picture from file
 //		String filePath = "C:\\cdio\\14.bmp";
 //		image = Highgui.imread(filePath,1);
-
+		
+		Mat circles = new Mat();
+		Mat grayImg = new Mat(image.rows(),image.cols(),image.type());
 		//picture from cam
 		VideoCapture webCam = new VideoCapture(1);
 		webCam.read(image);
-		
-		Highgui.imwrite("images\\scrCap.jpg",image);
+//		try {
+//			Thread.sleep(100);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		int rows = image.height();
 		int cols = image.width();
@@ -136,12 +146,11 @@ public class ImgCap {
 			}
 		}
 		//releasing webCame
-//		webCam.release();
+		webCam.release();
 		
 		//Calculating the coordinates for all balls
-		System.out.println(balls.size());
-		Graph ballGraph = new Graph(balls);
-		ArrayList<Point2D> ballSet = ballGraph.filterBalls();
+//		Graph ballGraph = new Graph(balls);
+//		ArrayList<Point2D> ballSet = ballGraph.filterBalls();
 
 		//obstacle outer coordinates in P2D
 		Point2D obstacleTopLeft = new Point2D.Double(obstacleMinX,obstacleMinY);
@@ -174,6 +183,35 @@ public class ImgCap {
 		double rightGoalCenter = (edgeBottomRight.getY()-edgeTopRight.getY())/2+edgeTopRight.getY();
 		Point2D rightGoalTop = new Point2D.Double(edgeBottomRight.getX(),rightGoalCenter-k);
 		Point2D rightGoalBottom = new Point2D.Double(edgeBottomRight.getX(),rightGoalCenter+k);
+		
+		//circles finding
+		ArrayList<Point2D> ballSet = new ArrayList<Point2D>();
+		Imgproc.cvtColor(image, grayImg, Imgproc.COLOR_BGRA2GRAY); 
+		Imgproc.GaussianBlur(grayImg, grayImg, new Size(3,3),0,0);
+		//http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles
+		Imgproc.HoughCircles(grayImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1, 20, 10, 20, 5, 15);
+		int radius;
+        Point pt;
+        for (int x = 0; x < circles.cols(); x++) {
+        	double vCircle[] = circles.get(0,x);
+        	if (vCircle == null) {
+        		System.out.println("no circles found");
+	            break;
+	        }
+        	
+        	ballSet.add(new Point2D.Double(vCircle[0],vCircle[1]));
+        	System.out.println(vCircle[0] + " " + vCircle[1]);
+	        pt = new Point(Math.round(vCircle[0]), Math.round(vCircle[1]));
+	        radius = (int)Math.round(vCircle[2]);
+	
+	        // draw the found circle
+	        Core.circle(image, pt, radius, new Scalar(0,0,0), 2);
+	        Core.circle(image, pt, 1, new Scalar(0,255,0), 0);
+        }
+		
+		Highgui.imwrite("images\\scrCap.jpg",image);
+		
+		//prints for testing
 		System.out.println("Left goal:");
 		System.out.println(leftGoalTop);
 		System.out.println(leftGoalBottom);
@@ -181,9 +219,6 @@ public class ImgCap {
 		System.out.println("Right goal:");
 		System.out.println(rightGoalTop);
 		System.out.println(rightGoalBottom);
-		
-		
-		//prints for testing
 		System.out.println("printing balls "+ballSet.size());
 		for(int i=0;i<ballSet.size();i++){
 			System.out.println(ballSet.get(i));
@@ -192,6 +227,8 @@ public class ImgCap {
 		System.out.println("RobotBack, X: "+robotB.getX()+" Y:"+robotB.getY());
 		System.out.println("obstacle: top left:"+obstacleTopLeft+" bottom Right: "+obstacleBottomRight);
 		System.out.println("top left: " + edgeTopLeft + " top right: " + edgeTopRight + "bottom left: " + edgeBottomLeft + "bottom right: " + edgeBottomRight);
+		
+		
 		
 		//return an info object
 //		return null;
