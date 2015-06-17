@@ -8,6 +8,8 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
+//import org.opencv
+
 
 public class ImgCap {
 //	public static int boldLowValue, boldHighValue, groundLowValue, groundHighValue, obstacleLowValue, obstacleHighValue, robotBackLowValue, robotBackHighValue;
@@ -38,13 +40,14 @@ public class ImgCap {
 		//The picture
 		Mat image = new Mat();		
 		//picture from file
-//		String filePath = "C:\\cdio\\12.bmp";
+//		String filePath = "C:\\cdio\\14.bmp";
 //		image = Highgui.imread(filePath,1);
 
 		//picture from cam
 		VideoCapture webCam = new VideoCapture(0);
 		webCam.read(image);
 		
+		Highgui.imwrite("images\\scrCap.jpg",image);
 		
 		int rows = image.height();
 		int cols = image.width();
@@ -69,8 +72,6 @@ public class ImgCap {
 		HashMap<Integer,Integer> edgeLeft = new HashMap<Integer,Integer>();
 		HashMap<Integer,Integer> edgeRight = new HashMap<Integer,Integer>();
 		//run through the picture
-//		double colort[] = {image.get(110,471)[0],image.get(110,471)[1],image.get(110,471)[2]};
-//		System.out.println(colort[0]+" "+colort[1]+" "+colort[2]+" ");
 		for (int y = 0; y <rows; y=y+2) {
 			for (int x = 0;x<cols;x=x+2){
 				double color[] = {image.get(y,x)[0],image.get(y,x)[1],image.get(y,x)[2]};
@@ -135,9 +136,10 @@ public class ImgCap {
 			}
 		}
 		//releasing webCame
-		webCam.release();
+//		webCam.release();
 		
 		//Calculating the coordinates for all balls
+		System.out.println(balls.size());
 		Graph ballGraph = new Graph(balls);
 		ArrayList<Point2D> ballSet = ballGraph.filterBalls();
 
