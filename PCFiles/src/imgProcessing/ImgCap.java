@@ -22,7 +22,7 @@ public class ImgCap {
 	
 	public ImgCap() {
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-	}
+ 	}
 	
 	public ImgInfo picAnal() {
 		//Compairison values
@@ -42,8 +42,8 @@ public class ImgCap {
 //		image = Highgui.imread(filePath,1);
 
 		//picture from cam
-		VideoCapture test = new VideoCapture(1);
-		test.read(image);
+		VideoCapture webCam = new VideoCapture(1);
+		webCam.read(image);
 		
 		
 		int rows = image.height();
@@ -130,7 +130,7 @@ public class ImgCap {
 				} 		
 			}
 		}
-		
+		webCam.release();
 		//Calculating the coordinates for all balls
 		Graph ballGraph = new Graph(balls);
 		ArrayList<Point2D> ballSet = ballGraph.filterBalls();
