@@ -257,7 +257,7 @@ public class AlgoEngine {
 	 * @return String Array of Commands
 	 */
 	private String[] changeDirection(int wantedDirection, int robotDirection){
-		int switchChoose = (int)wantedDirection - robotDirection;
+		int switchChoose = (int) (wantedDirection - robotDirection);
 		List<String> tempList = new ArrayList<String>();
 
 		switch (switchChoose){
@@ -305,6 +305,6 @@ public class AlgoEngine {
 	public String[] getInstruction(){
 		String[] arrayCommands = new String[commands.size()];
 		commands.toArray(arrayCommands);
-		return arrayCommands;
+		return arrayCommands; 
 	}
 }
