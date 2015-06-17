@@ -121,7 +121,7 @@ public class AlgoEngine {
 	private void setupStep(Point2D[] robot){
 		int t = 1000;
 		if (startPointer == 0){
-			commands.add("C_FW;;" + (t));
+			commands.add("C_FW " + (t));
 			robot_start = robot[0];
 			System.out.println("First setupState");
 		} else {
@@ -173,7 +173,7 @@ public class AlgoEngine {
 					robotDirection = 1;
 				}
 				/* and add how far to drive forward*/
-				commands.add("C_FW;;" + calcDriveTime(Math.abs(robot[0].getX() - balls[targetBall].getX())));
+				commands.add("C_FW " + calcDriveTime(Math.abs(robot[0].getX() - balls[targetBall].getX())));
 			}
 			/* if robot_y doesn't fit ball_y do following ...*/
 			if ( !((robot[0].getY() - tolerance) <= balls[targetBall].getY() && balls[targetBall].getY() <= (robot[0].getY() + tolerance)) ){
@@ -192,7 +192,7 @@ public class AlgoEngine {
 				}
 				
 				/* and add how far to drive forward*/
-				commands.add("C_FW;;" + calcDriveTime(Math.abs(robot[0].getY() - balls[targetBall].getY())));
+				commands.add("C_FW " + calcDriveTime(Math.abs(robot[0].getY() - balls[targetBall].getY())));
 			}
 		}
 	}
@@ -262,26 +262,26 @@ public class AlgoEngine {
 
 		switch (switchChoose){
 		case -3: /* RIGHT */
-			tempList.add("C_HR;;0");
+			tempList.add("C_HR 0");
 			break;
 		case -2: /* 180 */
-			tempList.add("C_HR;;0");
-			tempList.add("C_HR;;0");
+			tempList.add("C_HR 0");
+			tempList.add("C_HR 0");
 			break;
 		case -1: /* LEFT */
-			tempList.add("C_HL;;0");
+			tempList.add("C_HL 0");
 			break;
 		case 0: /* NONE */
 			break;
 		case 1: /* RIGHT */
-			tempList.add("C_HR;;0");
+			tempList.add("C_HR 0");
 			break;
 		case 2: /* 180 */
-			tempList.add("C_HR;;0");
-			tempList.add("C_HR;;0");
+			tempList.add("C_HR 0");
+			tempList.add("C_HR 0");
 			break;
 		case 3: /* LEFT */
-			tempList.add("C_HL;;0");
+			tempList.add("C_HL 0");
 			break;
 		default:
 			System.out.println("default");

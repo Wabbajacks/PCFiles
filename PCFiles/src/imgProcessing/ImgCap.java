@@ -28,10 +28,10 @@ public class ImgCap {
 		//Compairison values
 		int boldLowValue[] = {180, 190, 190};
 		int boldHighValue[] = {252, 252, 252};
-		int robotBackHighValue[] = {190, 90, 25};
-		int robotBackLowValue[] = {120, 40, 0};
-		int robotFrontHighValue[] = {50, 120, 50};
-		int robotFrontLowValue[] = {15, 60, 0};
+		int robotBackHighValue[] = {230, 175, 40};
+		int robotBackLowValue[] = {180, 125, 5};
+		int robotFrontHighValue[] = {100, 255, 225};
+		int robotFrontLowValue[] = {15, 200, 170};
 		int obstacleHighValue[] = {55, 65, 145};
 		int obstacleLowValue[] = {0, 0, 40};
 
@@ -199,7 +199,7 @@ public class ImgCap {
 	private int topOrLeftEdge(HashMap<Integer, Integer> edges) {
 		int result = 0;
 		for(Entry<Integer, Integer> entry: edges.entrySet()) {
-			if(entry.getValue() > 100) {
+			if(entry.getValue() > 60) {
 				if(entry.getKey() > result) {
 					result = entry.getKey();
 				}
@@ -211,7 +211,7 @@ public class ImgCap {
 	private int bottomOrRightEdge(HashMap<Integer, Integer> edges) {
 		int result = 640;
 		for(Entry<Integer, Integer> entry: edges.entrySet()) {
-			if(entry.getValue() > 100) {
+			if(entry.getValue() > 60) {
 				if(entry.getKey() < result) {
 					result = entry.getKey();
 				}
