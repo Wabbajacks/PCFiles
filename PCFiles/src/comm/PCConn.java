@@ -73,7 +73,7 @@ public class PCConn {
 		boolean connected;
 		
 		if(this.address == null) connected = conn.connectTo("btspp://");
-		else connected = conn.connectTo("btspp://");
+		else connected = conn.connectTo("btspp://" + address);
 		
 		// If connection can't be established exit and print error.
 		if (!connected) {

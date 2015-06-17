@@ -4,7 +4,7 @@ import comm.PCConn;
 
 public class BasicMovementTest {
 	public static void main(String[] args) {
-		PCConn conn = new PCConn();
+		PCConn conn = new PCConn("00165304789F");
 		
 //		String[] test1 = {"C_FW;;6000","C_HL;;0","C_FW;;5000", "C_HR;;0", "C_BW;;1000"};
 //		String[] test2 = {"C_BW;;2500","C_HR;;0","C_FW;;5000", "C_HR;;0", "C_FW;;1000"};
@@ -23,8 +23,8 @@ public class BasicMovementTest {
 //		System.out.println("Square:");
 //		System.out.println("Response: " + conn.sendMsg(square));
 		
-		String a = "C_FW;;500";
-		String b = "C_HL;;0";
+		String a = "C_FW 500";
+		String b = "C_HL 0";
 		
 		String[] test01 = {a,b};
 		String[] test02 = {a,b,a,b};
