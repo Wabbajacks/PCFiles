@@ -45,7 +45,12 @@ public class DriverEngine {
 				System.out.print(s + " ");
 			}
 			System.out.println();
-			con.sendMsg(algo.getInstruction());
+			try {
+				con.sendMsg(algo.getInstruction());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		/* TO here */
 

@@ -22,16 +22,16 @@ public class ImgCap {
 	
 	public ImgCap() {
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
- 	}
+	}
 	
 	public ImgInfo picAnal() {
 		//Compairison values
 		int boldLowValue[] = {180, 190, 190};
 		int boldHighValue[] = {252, 252, 252};
-		int robotBackHighValue[] = {120, 200, 250};
-		int robotBackLowValue[] = {20, 80, 200};
-		int robotFrontHighValue[] = {85, 150, 80};
-		int robotFrontLowValue[] = {50, 90, 30};
+		int robotBackHighValue[] = {190, 90, 25};
+		int robotBackLowValue[] = {120, 40, 0};
+		int robotFrontHighValue[] = {50, 120, 50};
+		int robotFrontLowValue[] = {15, 60, 0};
 		int obstacleHighValue[] = {55, 65, 145};
 		int obstacleLowValue[] = {0, 0, 40};
 
@@ -69,6 +69,8 @@ public class ImgCap {
 		HashMap<Integer,Integer> edgeLeft = new HashMap<Integer,Integer>();
 		HashMap<Integer,Integer> edgeRight = new HashMap<Integer,Integer>();
 		//run through the picture
+//		double colort[] = {image.get(110,471)[0],image.get(110,471)[1],image.get(110,471)[2]};
+//		System.out.println(colort[0]+" "+colort[1]+" "+colort[2]+" ");
 		for (int y = 0; y <rows; y=y+2) {
 			for (int x = 0;x<cols;x=x+2){
 				double color[] = {image.get(y,x)[0],image.get(y,x)[1],image.get(y,x)[2]};
@@ -130,7 +132,9 @@ public class ImgCap {
 				} 		
 			}
 		}
+		//releasing webCame
 		webCam.release();
+		
 		//Calculating the coordinates for all balls
 		Graph ballGraph = new Graph(balls);
 		ArrayList<Point2D> ballSet = ballGraph.filterBalls();
