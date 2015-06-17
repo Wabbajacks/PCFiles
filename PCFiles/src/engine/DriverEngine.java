@@ -1,8 +1,5 @@
 package engine;
 
-import java.awt.Image;
-import java.awt.geom.Point2D;
-
 import gui.GUI;
 import imgProcessing.*;
 import comm.PCConn;
@@ -30,7 +27,7 @@ public class DriverEngine {
 	 * 
 	 */
 	public DriverEngine(){
-		con = new PCConn();
+		con = new PCConn("00165304789F");
 		algo = new AlgoEngine();
 		cam = new ImgCap();
 		engine();

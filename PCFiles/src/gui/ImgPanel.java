@@ -2,6 +2,7 @@ package gui;
 
 import gui.utils.CreateTextimage;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,6 +25,7 @@ public class ImgPanel extends JPanel {
 	public ImgPanel() {
 		setPreferredSize(new Dimension(587, 240));
 		setLayout(new MigLayout());
+		setBackground(Color.decode("#333333"));
 		
 		try {
 			bimg = ImageIO.read(new File("images/scrCap.jpg"));
