@@ -121,11 +121,13 @@ public class ImgCap {
 							edgeBottom.put(tempArr[1],1);
 						}
 					}
-				} else if (color[0] > robotBackLowValue[0] && color[1] > robotBackLowValue[1] && color[2] > robotBackLowValue[2] && color[0] < robotBackHighValue[0] && color[1] < robotBackHighValue[1] && color[2] < robotBackHighValue[2]) {
+//				} else if (color[0] > robotBackLowValue[0] && color[1] > robotBackLowValue[1] && color[2] > robotBackLowValue[2] && color[0] < robotBackHighValue[0] && color[1] < robotBackHighValue[1] && color[2] < robotBackHighValue[2]) {
+				} else if (color[2]+100 < color[0] && color[1]+100 > color[0]){	
 					robotBack[0] +=x;
 					robotBack[1] +=y;
 					robotBack[2]++;
-				} else if (color[0] > robotFrontLowValue[0] && color[1] > robotFrontLowValue[1] && color[2] > robotFrontLowValue[2] && color[0] < robotFrontHighValue[0] && color[1] < robotFrontHighValue[1] && color[2] < robotFrontHighValue[2]) {
+//				} else if (color[0] > robotFrontLowValue[0] && color[1] > robotFrontLowValue[1] && color[2] > robotFrontLowValue[2] && color[0] < robotFrontHighValue[0] && color[1] < robotFrontHighValue[1] && color[2] < robotFrontHighValue[2]) {
+				} else if (color[0]+100 <color[1] && color[2]+50 > color[1]) {
 					robotFront[0] += x;
 					robotFront[1] += y;
 					robotFront[2]++;
