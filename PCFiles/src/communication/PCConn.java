@@ -1,10 +1,11 @@
-package communication;
+package comm;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import utils.PrepareStatement;
 import lejos.pc.comm.NXTConnector;
 
 /**
@@ -21,7 +22,7 @@ public class PCConn {
 	private String response = null;
 	
 	public PCConn() {
-		new PCConn("NONE");
+		new PCConn(null);
 	}
 	
 	/**
@@ -34,10 +35,7 @@ public class PCConn {
 	 * @throws IOException If in-/output stream error occurs.
 	 */
 	public PCConn(String address) {
-		if(address.equals("NONE") || address.equals(null))
-			this.address = "";
-		else
-			this.address = address;
+		this.address = address;
 	}
 
 	
@@ -65,12 +63,17 @@ public class PCConn {
 	 * 
 	 * @param msgs The message to be sent. Can only contain commands in the format ||command;;timeframe.
 	 * @return Response from NXT brick.
+	 * @throws Exception 
 	 */
-	public String sendMsg(String[] msgs) {
+	public String sendMsg(String[] msgs) throws Exception {
 		conn = new NXTConnector();
 		
 		// Connect to an NXT brick via bluetooth
-		boolean connected = conn.connectTo("btspp://");
+		
+		boolean connected;
+		
+		if(this.address == null) connected = conn.connectTo("btspp://");
+		else connected = conn.connectTo("btspp://");
 		
 		// If connection can't be established exit and print error.
 		if (!connected) {
@@ -82,25 +85,40 @@ public class PCConn {
 		in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		out = new DataOutputStream(conn.getOutputStream());
 		
-		try {
-			StringBuilder str = new StringBuilder();
-			
-			for(String a : msgs)
-				str.append("||" + a);
-			
-			String msg = str.toString() + "||";
-						
+		try {	
 			// Write message to NXT brick
-			this.out.writeBytes(msg+"\n");
+			this.out.writeBytes(PrepareStatement.prepStr(msgs) + "\n");
 			this.out.flush();
 			
 			// Wait for response
 			while((response = in.readLine()).equals(null)) System.out.println("Waiting for response...");
+			
+			// Handle response if any error was encountered
+			if(!response.equals("COMPLETE")) {
+				int end = response.indexOf("<");
+				String error = response.substring(0, end);
+				String emsg = response.substring(end+1, (response.length()-1));
+				
+				switch(error) {
+					case "ERROR":
+						System.out.println("Error occured on brick.");
+						System.out.println("Error message: " + emsg);
+					case "DNGCLOSE":
+						System.out.println("DANGER CLOSE! Brick has been stopped.");
+						System.out.println("Remaining commands: " + PrepareStatement.prettyStr(emsg));
+						break;
+					case "INCOMPLETE":
+						System.out.println("Cannot complete task! Brick has been stopped.");
+						System.out.println("Remaining commands: " + PrepareStatement.prettyStr(emsg));
+						break;
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				out.writeBytes("END\n");
+				out.flush();
 				
 				this.out.close();
 				this.in.close();
@@ -110,8 +128,9 @@ public class PCConn {
 			}
 		}
 		
+		// Minor fix
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
