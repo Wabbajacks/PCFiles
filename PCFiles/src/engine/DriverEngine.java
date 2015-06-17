@@ -1,7 +1,9 @@
 package engine;
 
+import java.awt.Image;
 import java.awt.geom.Point2D;
 
+import gui.GUI;
 import imgProcessing.*;
 import comm.PCConn;
 
@@ -14,6 +16,8 @@ public class DriverEngine {
 	private PCConn con;
 	private AlgoEngine algo;
 	private ImgCap cam;
+	private GUI gui;
+	
 	/* TODO:
 	 * The DriverEngine runs the show
 	 * 
@@ -30,6 +34,15 @@ public class DriverEngine {
 		algo = new AlgoEngine();
 		cam = new ImgCap();
 		engine();
+		
+		// Get instance of GUI
+		gui = GUI.getInstance();
+		
+		// Start GUI
+		gui.createAndShowGUI();
+		
+		// Set initial image in gui
+		gui.updateImage(null);
 	}
 
 	public static void main(String args[]){

@@ -11,5 +11,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Opencv2"/>
 	<classpathentry kind="lib" path="opencv-2410.jar"/>
 	<classpathentry kind="lib" path="bluecove-2.1.0.jar"/>
+	<classpathentry kind="lib" path="miglayout-4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
