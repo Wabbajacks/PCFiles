@@ -28,6 +28,12 @@ public class LinesPanel extends JPanel {
 		this.repaint();
 	}
 	
+	public void clearLines() {
+		points.clear();
+		
+		this.repaint();
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -49,6 +55,7 @@ public class LinesPanel extends JPanel {
 			g2d.setColor(col);
 			
 			g.drawLine(points.get(i).x, points.get(i).y, points.get(i+1).x, points.get(i+1).y);
+			
 			i++;
 		}
 	}

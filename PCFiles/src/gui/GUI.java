@@ -83,4 +83,8 @@ public class GUI extends JPanel {
 	public void drawLine(Point p1, Point p2) {
 		ip.drawLine(p1, p2);
 	}
+	
+	public void clearLines() {
+		ip.clearLines();
+	}
 }

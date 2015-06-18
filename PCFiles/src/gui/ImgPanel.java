@@ -115,4 +115,8 @@ public class ImgPanel extends JPanel {
 	public void drawLine(Point p1, Point p2) {
 		lines.drawLine(p1, p2);
 	}
+
+	public void clearLines() {
+		lines.clearLines();
+	}
 }
