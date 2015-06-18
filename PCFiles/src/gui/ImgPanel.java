@@ -75,43 +75,26 @@ public class ImgPanel extends JPanel {
 		add(lpane);
 	}
 	
-	/**
-	 * Will update the image used by the GUI of the track.<br>
-	 * 
-	 * @param path Path to the new image.
-	 */
 	public void updateImage(String path) {
 		try {
 			bimg = ImageIO.read(new File(path));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		image.setIcon(new ImageIcon(bimg));
 	}
 	
-	/**
-	 * Will update the image used by the GUI of the track.<br><br>
-	 * 
-	 * If no parameter is given the default path {@link #DEFAULT_IMAGE_PATH} will be used.
-	 */
 	public void updateImage() {
 		try {
 			bimg = ImageIO.read(new File(DEFAULT_IMAGE_PATH));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		image.setIcon(new ImageIcon(bimg));
 	}
 	
-	/**
-	 * 
-	 * @param p1
-	 * @param p2
-	 */
 	public void drawLine(Point p1, Point p2) {
 		lines.drawLine(p1, p2);
 	}
