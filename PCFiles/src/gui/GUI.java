@@ -55,12 +55,20 @@ public class GUI extends JPanel {
 	}
 	
 	/**
+	 * Updates the image shown in the "Latest image"-panel.<br>
+	 * If no string parameter with a path to file is given, the default image path will be used.
+	 */
+	public void updateImage() {
+		ip.updateImage();
+	}
+	
+	/**
 	 * Updates the image shown in the "Latest image"-panel.
 	 * 
 	 * @param path Path to the new image.
 	 */
 	public void updateImage(String path) {
-		ip.updateImage();
+		ip.updateImage(path);
 	}
 
 	/**

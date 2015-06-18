@@ -46,7 +46,7 @@ public class DriverEngine {
 		gui = GUI.getInstance();
 		
 		// Set initial image in gui
-		gui.updateImage(null);
+		gui.updateImage();
 	}
 	
 	private void createAndShowGUI() {
