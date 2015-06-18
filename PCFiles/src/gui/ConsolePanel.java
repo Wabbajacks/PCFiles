@@ -11,13 +11,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
-
 import net.miginfocom.swing.MigLayout;
+
+/**
+ * Contains the console which will print all events done by the image processing, algorithm engine, and robot movements.
+ * 
+ * @author Kristin Hansen
+ */
 
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private JTextArea console;
+	private final JTextArea console;
 	private JScrollPane scroll;
 	private TitledBorder title;
 	
@@ -25,18 +30,16 @@ public class ConsolePanel extends JPanel {
 		setPreferredSize(new Dimension(450, 150));
 		setLayout(new MigLayout());
 		setBackground(Color.decode("#333333"));
-		setOpaque(true);
+		setOpaque(false);
 		
-		console = new JTextArea();
-		console.setPreferredSize(new Dimension(450, 150));
+		console = new JTextArea("Init...\n");
+		console.setPreferredSize(new Dimension(450, 112));
 		console.setBackground(Color.decode("#333333"));
 		console.setBorder(BorderFactory.createEmptyBorder());
 		console.setForeground(Color.decode("#FFFFFF"));
 		console.setWrapStyleWord(false);
 		console.setFocusable(false);
 		console.setLineWrap(true);
-		
-		addTxt("Init...\n");
 		
 		scroll = new JScrollPane(console);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -52,14 +55,14 @@ public class ConsolePanel extends JPanel {
 		add(scroll);
 	}
 	
-	public void addTxt(String txt) {
+	public void addTxt(final String txt) {
 		Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         
 		String time = sdf.format(cal.getTime());
 		
-		System.out.println("[" + time + "] " + txt + "\n");
-		
 		this.console.append("[" + time + "] " + txt + "\n");
+
+		this.console.setCaretPosition(this.console.getText().length()-1);
 	}
 }

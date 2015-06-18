@@ -3,11 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -41,7 +37,8 @@ public class GUI extends JPanel {
 	private GUI() {
 		// Set layout specific settings for GUI frame
 		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(693, 650));
+		setPreferredSize(new Dimension(693, 700));
+		setOpaque(false);
 		
 		// Create main panels
 		ip = new ImgPanel();
@@ -78,7 +75,7 @@ public class GUI extends JPanel {
 		f.setResizable(false);
 
         // Create the content pane
-        JComponent c = new GUI();
+        JComponent c = instance;
         
         c.setOpaque(false);
         f.setContentPane(c);

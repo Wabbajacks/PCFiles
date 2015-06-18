@@ -17,6 +17,11 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * Panel that contains the current/latest image processed by the image processing.
+ * 
+ * @author Kristin Hansen
+ */
 public class ImgPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	

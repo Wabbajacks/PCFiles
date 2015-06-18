@@ -3,27 +3,21 @@ package test;
 import gui.GUI;
 
 public class GUITest {
-	private GUI gui;
+	private GUI gui = null;
 	
 	public GUITest() {
-		gui = GUI.getInstance();
-		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
+            	gui = GUI.getInstance();
+            	
                 gui.createAndShowGUI();
+                
+                gui.addTxt("Test1");
+                
+                gui.addTxt("Test2");
             }
-        });
-		
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		gui.addTxt("Test");
-		
-		gui.addTxt("Test2");
+		});
 	}
 	
 	public static void main(String[] args) {
