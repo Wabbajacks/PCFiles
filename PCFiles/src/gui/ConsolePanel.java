@@ -55,7 +55,7 @@ public class ConsolePanel extends JPanel {
 		add(scroll);
 	}
 	
-	public void addTxt(final String txt) {
+	public void addTxt(String txt) {
 		Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         

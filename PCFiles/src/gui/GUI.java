@@ -62,35 +62,12 @@ public class GUI extends JPanel {
 		return instance;
 	}
 	
-	
-	/**
-	 * Instantiates the GUI and creates the necessary panes/panels.<br><br>
-	 */
-	public void createAndShowGUI() {
-		// Create window
-		JFrame f = new JFrame("Sheogorath GUI");
-		
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f.setBackground(Color.decode("#333333"));
-		f.setResizable(false);
-
-        // Create the content pane
-        JComponent c = instance;
-        
-        c.setOpaque(false);
-        f.setContentPane(c);
-
-        // Draw the window
-        f.pack();
-        f.setVisible(true);
-	}
-	
 	/**
 	 * 
 	 * @param img
 	 */
-	public void updateImage(Image img) {
-		// TODO
+	public void updateImage(String path) {
+		ip.updateImage(path);
 	}
 
 	/**
