@@ -305,6 +305,14 @@ public class AlgoEngine {
 		
 		return degree;
 	}
+	
+	public Point2D courseStart(){
+		return new Point2D.Double(120, 120);
+	}
+	
+	public Point2D courseEnd(){
+		return new Point2D.Double(200, 200);
+	}
 
 	/**
 	 * getInstruction
