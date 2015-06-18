@@ -1,6 +1,6 @@
 package imgProcessing;
 
-import java.awt.geom.Point2D;
+import math.geom2d.Point2D;
 import java.util.ArrayList;
 
 public class ImgInfo {
