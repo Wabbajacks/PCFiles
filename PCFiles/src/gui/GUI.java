@@ -1,12 +1,8 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.geom.Point2D;
+import java.awt.Point;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -21,10 +17,6 @@ import net.miginfocom.swing.MigLayout;
 
 public class GUI extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
-	private Image img;
-	private Point2D from;
-	private Point2D to;
 	
 	private static GUI instance = null;
 	
@@ -63,11 +55,12 @@ public class GUI extends JPanel {
 	}
 	
 	/**
+	 * Updates the image shown in the "Latest image"-panel.
 	 * 
-	 * @param img
+	 * @param path Path to the new image.
 	 */
 	public void updateImage(String path) {
-		ip.updateImage(path);
+		ip.updateImage();
 	}
 
 	/**
@@ -77,5 +70,9 @@ public class GUI extends JPanel {
 	 */
 	public void addTxt(String txt) {
 		cp.addTxt(txt);
+	}
+	
+	public void drawLine(Point p1, Point p2) {
+		ip.drawLine(p1, p2);
 	}
 }

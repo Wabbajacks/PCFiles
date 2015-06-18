@@ -39,11 +39,11 @@ public class DriverEngine {
 		cam = new ImgCap();
 		engine();
 		
-		// Get instance of GUI
-		gui = GUI.getInstance();
-		
 		// Start GUI
 		createAndShowGUI();
+		
+		// Get instance of GUI
+		gui = GUI.getInstance();
 		
 		// Set initial image in gui
 		gui.updateImage(null);

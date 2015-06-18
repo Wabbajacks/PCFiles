@@ -22,7 +22,7 @@ import net.miginfocom.swing.MigLayout;
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private final JTextArea console;
+	private JTextArea console;
 	private JScrollPane scroll;
 	private TitledBorder title;
 	
@@ -32,7 +32,7 @@ public class ConsolePanel extends JPanel {
 		setBackground(Color.decode("#333333"));
 		setOpaque(false);
 		
-		console = new JTextArea("Init...\n");
+		console = new JTextArea();
 		console.setPreferredSize(new Dimension(450, 112));
 		console.setBackground(Color.decode("#333333"));
 		console.setBorder(BorderFactory.createEmptyBorder());
@@ -53,6 +53,8 @@ public class ConsolePanel extends JPanel {
 		setBorder(title);
 		
 		add(scroll);
+		
+		addTxt("Init...");
 	}
 	
 	public void addTxt(String txt) {

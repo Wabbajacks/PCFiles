@@ -1,6 +1,7 @@
 package test;
 
 import java.awt.Color;
+import java.awt.Point;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -11,13 +12,10 @@ public class GUITest {
 	private GUI gui = null;
 	
 	public GUITest() {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-			public void run() {
-            	gui = GUI.getInstance();
-                createAndShowGUI();
-            }
-		});
+    	gui = GUI.getInstance();
+        createAndShowGUI();
+        
+        gui.drawLine(new Point(10,10), new Point(100,100));
 	}
 	
 	public static void main(String[] args) {
