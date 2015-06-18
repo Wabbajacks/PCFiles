@@ -8,9 +8,22 @@ public class GUITest {
 	public GUITest() {
 		gui = GUI.getInstance();
 		
-		gui.createAndShowGUI();
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                gui.createAndShowGUI();
+            }
+        });
 		
-		gui.updateImage(null);
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		gui.addTxt("Test");
+		
+		gui.addTxt("Test2");
 	}
 	
 	public static void main(String[] args) {

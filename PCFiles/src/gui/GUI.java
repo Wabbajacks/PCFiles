@@ -3,7 +3,11 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -28,17 +32,20 @@ public class GUI extends JPanel {
 	
 	private static GUI instance = null;
 	
+	private ImgPanel ip;
+	private ConsolePanel cp;
+	
 	/**
 	 * GUI class constructor.
 	 */
 	private GUI() {
 		// Set layout specific settings for GUI frame
 		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(665, 675));
+		setPreferredSize(new Dimension(693, 650));
 		
 		// Create main panels
-		ImgPanel ip = new ImgPanel();
-		ConsolePanel cp = new ConsolePanel();
+		ip = new ImgPanel();
+		cp = new ConsolePanel();
 		
 		add(ip, "wrap");
 		add(cp);
@@ -87,5 +94,14 @@ public class GUI extends JPanel {
 	 */
 	public void updateImage(Image img) {
 		// TODO
+	}
+
+	/**
+	 * Add text to the console window in the GUI.
+	 * 
+	 * @param txt A string that has to be printed in the console window.
+	 */
+	public void addTxt(String txt) {
+		cp.addTxt(txt);
 	}
 }
