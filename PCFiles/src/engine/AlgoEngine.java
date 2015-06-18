@@ -103,13 +103,13 @@ public class AlgoEngine {
 	 * @param balls - Point2D[] of all the balls coordinates
 	 * @param robot - Point2D[] of the robots coordinates
 	 */
-	public String[] run(Point2D[] balls, Point2D[] robot, Point2D[] wall){
+	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall){
 		commands.clear();
 		
 		if (startPointer < 2)	setupStep(robot);
 		if (startPointer > 1)	firstSteps(balls, robot, wall);
 		
-		return getInstruction();
+//		return getInstruction();
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public class AlgoEngine {
 	 * @param robot - robot Point2D coordinates
 	 */
 	private void setupStep(Point2D[] robot){
-		int t = 1000;
+		int t = 2000;
 		if (startPointer == 0){
 			commands.add("C_FW " + (t));
 			robot_start = robot[0];
@@ -303,6 +303,7 @@ public class AlgoEngine {
 	 * @return String array with Instructions to robot.
 	 */
 	public String[] getInstruction(){
+		System.out.println("Los ball of the targetos!: " + targetBall);
 		String[] arrayCommands = new String[commands.size()];
 		commands.toArray(arrayCommands);
 		return arrayCommands; 
