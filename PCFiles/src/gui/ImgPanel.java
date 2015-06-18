@@ -34,7 +34,9 @@ public class ImgPanel extends JPanel {
 		}
 		
 		image = new JLabel(new ImageIcon(bimg));
+		
 		title = new JLabel("Latest image");
+		title.setForeground(Color.decode("#FFFFFF"));
 		
 		add(title, "wrap");
 		add(image);

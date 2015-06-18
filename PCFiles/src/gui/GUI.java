@@ -34,7 +34,7 @@ public class GUI extends JPanel {
 	private GUI() {
 		// Set layout specific settings for GUI frame
 		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(600, 400));
+		setPreferredSize(new Dimension(665, 675));
 		
 		// Create main panels
 		ImgPanel ip = new ImgPanel();
@@ -86,6 +86,6 @@ public class GUI extends JPanel {
 	 * @param img
 	 */
 	public void updateImage(Image img) {
-		
+		// TODO
 	}
 }
