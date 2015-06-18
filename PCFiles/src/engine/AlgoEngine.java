@@ -1,9 +1,14 @@
 package engine;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.math.*;
+
+import math.geom2d.Vector2D;
 
 /**
  * AlgoEngine controls which instruction the robot should be given 
@@ -103,13 +108,21 @@ public class AlgoEngine {
 	 * @param balls - Point2D[] of all the balls coordinates
 	 * @param robot - Point2D[] of the robots coordinates
 	 */
-	public String[] run(Point2D[] balls, Point2D[] robot, Point2D[] wall){
+	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall){
 		commands.clear();
 		
 		if (startPointer < 2)	setupStep(robot);
 		if (startPointer > 1)	firstSteps(balls, robot, wall);
 		
-		return getInstruction();
+//		return getInstruction();
+	}
+	
+	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall, Point2D[] obst){
+		// Obstacle can be made into a rectangle if needed
+		
+		commands.clear();
+		
+		
 	}
 	
 	/**
@@ -119,7 +132,7 @@ public class AlgoEngine {
 	 * @param robot - robot Point2D coordinates
 	 */
 	private void setupStep(Point2D[] robot){
-		int t = 1000;
+		int t = 2000;
 		if (startPointer == 0){
 			commands.add("C_FW " + (t));
 			robot_start = robot[0];
@@ -295,6 +308,34 @@ public class AlgoEngine {
 	private int calcDriveTime(double distance){
 		return (int) (distance*move_constant);
 	}
+	
+	/**
+	 * 
+	 * @param l should always be the robots vector
+	 * @param j Should always be the vector from the robot to the ball
+	 * @return Degree from l to j counterclockwise
+	 */
+	public static int degree (Vector2D l, Vector2D j) {
+		int degree = 0;
+		
+		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
+		
+		return degree;
+	}
+	
+	private boolean checkInterSection(Point2D[] obst, Line2D l) {
+		Rectangle2D r = new Rectangle2D.Double(obst[0].getX(), obst[0].getY(), (obst[1].getX()-obst[0].getX()), (obst[0].getY()-obst[1].getY()));
+		
+		return l.intersects(r);
+	}
+	
+	public Point2D courseStart(){
+		return new Point2D.Double(120, 120);
+	}
+	
+	public Point2D courseEnd(){
+		return new Point2D.Double(200, 200);
+	}
 
 	/**
 	 * getInstruction
@@ -303,6 +344,7 @@ public class AlgoEngine {
 	 * @return String array with Instructions to robot.
 	 */
 	public String[] getInstruction(){
+		System.out.println("Los ball of the targetos!: " + targetBall);
 		String[] arrayCommands = new String[commands.size()];
 		commands.toArray(arrayCommands);
 		return arrayCommands; 

@@ -1,5 +1,10 @@
 package engine;
 
+import java.awt.Color;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+
 import gui.GUI;
 import imgProcessing.*;
 import comm.PCConn;
@@ -14,6 +19,8 @@ public class DriverEngine {
 	private AlgoEngine algo;
 	private ImgCap cam;
 	private GUI gui;
+	
+	private final String GUI_NAME = "Sheogorath GUI";
 	
 	/* TODO:
 	 * The DriverEngine runs the show
@@ -32,14 +39,33 @@ public class DriverEngine {
 		cam = new ImgCap();
 		engine();
 		
+		// Start GUI
+		createAndShowGUI();
+		
 		// Get instance of GUI
 		gui = GUI.getInstance();
 		
-		// Start GUI
-		gui.createAndShowGUI();
-		
 		// Set initial image in gui
 		gui.updateImage(null);
+	}
+	
+	private void createAndShowGUI() {
+		// Create window
+		JFrame f = new JFrame(GUI_NAME);
+		
+		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f.setBackground(Color.decode("#333333"));
+		f.setResizable(false);
+
+        // Create the content pane
+        JComponent c = GUI.getInstance();
+        
+        c.setOpaque(false);
+        f.setContentPane(c);
+
+        // Draw the window
+        f.pack();
+        f.setVisible(true);
 	}
 
 	public static void main(String args[]){

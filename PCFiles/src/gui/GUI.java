@@ -1,12 +1,8 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.geom.Point2D;
+import java.awt.Point;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -22,11 +18,10 @@ import net.miginfocom.swing.MigLayout;
 public class GUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private Image img;
-	private Point2D from;
-	private Point2D to;
-	
 	private static GUI instance = null;
+	
+	private ImgPanel ip;
+	private ConsolePanel cp;
 	
 	/**
 	 * GUI class constructor.
@@ -34,11 +29,12 @@ public class GUI extends JPanel {
 	private GUI() {
 		// Set layout specific settings for GUI frame
 		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(600, 400));
+		setPreferredSize(new Dimension(693, 700));
+		setOpaque(false);
 		
 		// Create main panels
-		ImgPanel ip = new ImgPanel();
-		ConsolePanel cp = new ConsolePanel();
+		ip = new ImgPanel();
+		cp = new ConsolePanel();
 		
 		add(ip, "wrap");
 		add(cp);
@@ -58,34 +54,25 @@ public class GUI extends JPanel {
 		return instance;
 	}
 	
-	
 	/**
-	 * Instantiates the GUI and creates the necessary panes/panels.<br><br>
+	 * Updates the image shown in the "Latest image"-panel.
+	 * 
+	 * @param path Path to the new image.
 	 */
-	public void createAndShowGUI() {
-		// Create window
-		JFrame f = new JFrame("Sheogorath GUI");
-		
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f.setBackground(Color.decode("#333333"));
-		f.setResizable(false);
+	public void updateImage(String path) {
+		ip.updateImage();
+	}
 
-        // Create the content pane
-        JComponent c = new GUI();
-        
-        c.setOpaque(false);
-        f.setContentPane(c);
-
-        // Draw the window
-        f.pack();
-        f.setVisible(true);
+	/**
+	 * Add text to the console window in the GUI.
+	 * 
+	 * @param txt A string that has to be printed in the console window.
+	 */
+	public void addTxt(String txt) {
+		cp.addTxt(txt);
 	}
 	
-	/**
-	 * 
-	 * @param img
-	 */
-	public void updateImage(Image img) {
-		
+	public void drawLine(Point p1, Point p2) {
+		ip.drawLine(p1, p2);
 	}
 }
