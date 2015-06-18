@@ -2,20 +2,15 @@ package gui;
 
 import gui.utils.CreateTextimage;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -36,7 +31,7 @@ public class ImgPanel extends JPanel {
 	private JLabel image;
 	private TitledBorder title;
 	private JLayeredPane lpane;
-	private JPanel lines;
+	private LinesPanel lines;
 	
 	private final String DEFAULT_IMAGE_PATH = "images/scrCap.jpg";
 	
@@ -63,7 +58,7 @@ public class ImgPanel extends JPanel {
 		image.setPreferredSize(dim);
 		image.setBounds(0, 0, bimg.getWidth(), bimg.getHeight());
 		
-		lines = new JPanel();
+		lines = new LinesPanel();
 		lines.setPreferredSize(image.getPreferredSize());
 		lines.setBounds(image.getBounds());
 		lines.setOpaque(false);
@@ -78,13 +73,6 @@ public class ImgPanel extends JPanel {
 		setBorder(title);
 		
 		add(lpane);
-	}
-	
-	/**
-	 * Will add a line to the image.
-	 */
-	public void addLine() {
-		
 	}
 	
 	/**
@@ -119,25 +107,12 @@ public class ImgPanel extends JPanel {
 		image.setIcon(new ImageIcon(bimg));
 	}
 	
-	@Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        
-        Graphics2D g2d = (Graphics2D) g;
-        
-        g2d.setColor(Color.blue);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
-        
-        g.drawLine(10, 10, 100, 500);
-    }
-	
 	/**
 	 * 
 	 * @param p1
 	 * @param p2
 	 */
 	public void drawLine(Point p1, Point p2) {
-		this.repaint();
+		lines.drawLine(p1, p2);
 	}
 }

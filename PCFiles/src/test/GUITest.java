@@ -16,6 +16,8 @@ public class GUITest {
         createAndShowGUI();
         
         gui.drawLine(new Point(10,10), new Point(100,100));
+        gui.drawLine(new Point(100,100), new Point(50,200));
+        gui.drawLine(new Point(50,200), new Point(10,10));
 	}
 	
 	public static void main(String[] args) {
