@@ -1,7 +1,10 @@
 package gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
@@ -22,6 +25,7 @@ public class GUI extends JPanel {
 	
 	private ImgPanel ip;
 	private ConsolePanel cp;
+	private ButtonPanel bp;
 	
 	/**
 	 * GUI class constructor.
@@ -29,15 +33,34 @@ public class GUI extends JPanel {
 	private GUI() {
 		// Set layout specific settings for GUI frame
 		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(693, 700));
 		setOpaque(false);
 		
 		// Create main panels
 		ip = new ImgPanel();
 		cp = new ConsolePanel();
+		bp = new ButtonPanel();
 		
-		add(ip, "wrap");
+		bp.getClearLines().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearLines();
+				addTxt("Removing all lines.");
+			}
+			
+		});
+		
+		bp.getUpdateImage().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateImage();
+				addTxt("Updating image.");
+			}
+			
+		});
+		
+		add(ip, "wrap, span");
 		add(cp);
+		add(bp);
 	}
 	
 	/**

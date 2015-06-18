@@ -36,30 +36,32 @@ public class ImgPanel extends JPanel {
 	private final String DEFAULT_IMAGE_PATH = "images/scrCap.jpg";
 	
 	public ImgPanel() {
-		Dimension dim = new Dimension(680, 530);
-		
-		setMinimumSize(dim);
-		setPreferredSize(dim);
-		setMaximumSize(dim);
-		
-		setLayout(new MigLayout());
-		setBackground(Color.decode("#333333"));
-		
 		try {
 			bimg = ImageIO.read(new File(DEFAULT_IMAGE_PATH));
 		} catch(IOException e) {
 			bimg = CreateTextimage.createImage("No screen capture available.");
 		}
 		
+		Dimension dim = new Dimension(bimg.getWidth(), bimg.getHeight());
+		
+		setLayout(new MigLayout());
+		setBackground(Color.decode("#333333"));
+		
 		lpane = new JLayeredPane();
+		lpane.setMinimumSize(dim);
 		lpane.setPreferredSize(dim);
+		lpane.setMaximumSize(dim);
 		
 		image = new JLabel(new ImageIcon(bimg));
+		image.setMinimumSize(dim);
 		image.setPreferredSize(dim);
+		image.setMaximumSize(dim);
 		image.setBounds(0, 0, bimg.getWidth(), bimg.getHeight());
 		
 		lines = new LinesPanel();
+		lines.setMinimumSize(image.getMinimumSize());
 		lines.setPreferredSize(image.getPreferredSize());
+		lines.setMaximumSize(image.getMaximumSize());
 		lines.setBounds(image.getBounds());
 		lines.setOpaque(false);
 		
@@ -67,8 +69,8 @@ public class ImgPanel extends JPanel {
 		title.setTitleFont(new Font("Arial", 1, 14));
 		title.setTitleColor(Color.decode("#FFFFFF"));
 		
-		lpane.add(image, new Integer(1), 0);
-		lpane.add(lines, new Integer(2), 0);
+		lpane.add(image, 0, 0);
+		lpane.add(lines, 1, 0);
 		
 		setBorder(title);
 		

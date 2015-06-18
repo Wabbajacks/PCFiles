@@ -2,6 +2,7 @@ package test;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.Random;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -34,13 +35,31 @@ public class GUITest {
 	        gui.addTxt("Adding line with cooardinates: [50,200], [10,10]");
 	        gui.drawLine(new Point(50,200), new Point(10,10));
 	        
+	        Random ran = new Random();
+	        
+	        for(int i = 0; i < 10; i++) {
+	        	Thread.sleep(1000);
+	        	int a = ran.nextInt(640);
+	        	int b = ran.nextInt(640);
+	        	int c = ran.nextInt(640);
+	        	int d = ran.nextInt(640);
+	        	
+	        	gui.addTxt("Adding line with coordinates: [" + a + ", " + b + "], [" + c + ", " + d + "]");
+	        	gui.drawLine(new Point(a, b), new Point(c,d));
+	        }
+	        
+	        gui.addTxt("Updating image...");
 	        gui.updateImage();
-	        gui.updateImage("images/scrCap2.jpg");
-        
-        
+	        
 			Thread.sleep(1500);
 			
+			gui.addTxt("Removing all lines.");
 			gui.clearLines();
+			
+			Thread.sleep(900);
+	    	
+			gui.addTxt("Adding line with coordinates: [0, 0], [640,480]");
+			gui.drawLine(new Point(0,0), new Point(640,480));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -27,13 +27,11 @@ public class ConsolePanel extends JPanel {
 	private TitledBorder title;
 	
 	public ConsolePanel() {
-		setPreferredSize(new Dimension(450, 150));
 		setLayout(new MigLayout());
 		setBackground(Color.decode("#333333"));
 		setOpaque(false);
 		
-		console = new JTextArea();
-		console.setPreferredSize(new Dimension(450, 112));
+		console = new JTextArea(8,35);
 		console.setBackground(Color.decode("#333333"));
 		console.setBorder(BorderFactory.createEmptyBorder());
 		console.setForeground(Color.decode("#FFFFFF"));
