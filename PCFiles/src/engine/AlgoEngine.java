@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.math.*;
+import math.geom2d.Vector2D;
 
 /**
  * AlgoEngine controls which instruction the robot should be given 
@@ -294,6 +296,14 @@ public class AlgoEngine {
 
 	private int calcDriveTime(double distance){
 		return (int) (distance*move_constant);
+	}
+	
+	public static int degree (Vector2D l, Vector2D j) {
+		int degree = 0;
+		
+		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
+		
+		return degree;
 	}
 
 	/**
