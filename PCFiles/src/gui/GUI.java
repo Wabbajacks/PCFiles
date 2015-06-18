@@ -80,10 +80,22 @@ public class GUI extends JPanel {
 		cp.addTxt(txt);
 	}
 	
-	public void drawLine(Point p1, Point p2) {
-		ip.drawLine(p1, p2);
+	/**
+	 * Adds a line to the current image. It takes two parameters, two points.<br>
+	 * 
+	 * The two points are two coordinate sets a "from" and a "to" point, defining the boundaries of the line.
+	 * 
+	 * @param from The x,y-coordinate "from"
+	 * @param to The x,y-coordinate "to"
+	 */
+	public void drawLine(Point from, Point to) {
+		ip.drawLine(from, to);
 	}
 	
+	/**
+	 * Clears all drawn lines from the current "Latest image"-panel in the GUI.<br>
+	 * Note: this cannot be reversed.
+	 */
 	public void clearLines() {
 		ip.clearLines();
 	}
