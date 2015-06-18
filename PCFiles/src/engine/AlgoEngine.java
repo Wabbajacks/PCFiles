@@ -1,10 +1,13 @@
 package engine;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.math.*;
+
 import math.geom2d.Vector2D;
 
 /**
@@ -112,6 +115,14 @@ public class AlgoEngine {
 		if (startPointer > 1)	firstSteps(balls, robot, wall);
 		
 //		return getInstruction();
+	}
+	
+	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall, Point2D[] obst){
+		// Obstacle can be made into a rectangle if needed
+		
+		commands.clear();
+		
+		
 	}
 	
 	/**
@@ -298,12 +309,24 @@ public class AlgoEngine {
 		return (int) (distance*move_constant);
 	}
 	
+	/**
+	 * 
+	 * @param l should always be the robots vector
+	 * @param j Should always be the vector from the robot to the ball
+	 * @return Degree from l to j counterclockwise
+	 */
 	public static int degree (Vector2D l, Vector2D j) {
 		int degree = 0;
 		
 		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
 		
 		return degree;
+	}
+	
+	private boolean checkInterSection(Point2D[] obst, Line2D l) {
+		Rectangle2D r = new Rectangle2D.Double(obst[0].getX(), obst[0].getY(), (obst[1].getX()-obst[0].getX()), (obst[0].getY()-obst[1].getY()));
+		
+		return l.intersects(r);
 	}
 	
 	public Point2D courseStart(){
