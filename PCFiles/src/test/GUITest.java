@@ -7,8 +7,6 @@ import java.util.Random;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import com.seisw.util.geom.Point2D;
-
 import gui.GUI;
 
 public class GUITest {

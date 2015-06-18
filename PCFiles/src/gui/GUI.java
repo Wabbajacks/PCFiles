@@ -1,7 +1,5 @@
 package gui;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +38,7 @@ public class GUI extends JPanel {
 		cp = new ConsolePanel();
 		bp = new ButtonPanel();
 		
-		bp.getClearLines().addActionListener(new ActionListener() {
+		bp.getClearLinesButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clearLines();
@@ -49,7 +47,7 @@ public class GUI extends JPanel {
 			
 		});
 		
-		bp.getUpdateImage().addActionListener(new ActionListener() {
+		bp.getUpdateImageButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				updateImage();

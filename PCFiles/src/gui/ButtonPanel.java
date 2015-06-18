@@ -10,11 +10,20 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * Contains buttons used by GUI. Add events to the buttons with the get-methods for each button
+ * <ul>
+ * <li>{@link #getClearLinesButton()}</li>
+ * <li>{@link #getUpdateImageButton()}</li>
+ * </ul>
+ * 
+ * @author Kristin Hansen
+ */
 public class ButtonPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private JButton clearLines;
-	private JButton updateImage;
+	private JButton clearLinesButton;
+	private JButton updateImageButton;
 
 	public ButtonPanel() {
 		TitledBorder title = new TitledBorder("Commands");
@@ -26,18 +35,18 @@ public class ButtonPanel extends JPanel {
 		setBorder(title);
 		setBackground(Color.decode("#333333"));
 		
-		clearLines = new JButton("Clear lines");
-		updateImage = new JButton("Update image");
+		clearLinesButton = new JButton("Clear lines");
+		updateImageButton = new JButton("Update image");
 		
-		add(clearLines, "wrap");
-		add(updateImage);
+		add(clearLinesButton, "wrap");
+		add(updateImageButton);
 	}
 
-	public JButton getClearLines() {
-		return clearLines;
+	public JButton getClearLinesButton() {
+		return clearLinesButton;
 	}
 
-	public JButton getUpdateImage() {
-		return updateImage;
+	public JButton getUpdateImageButton() {
+		return updateImageButton;
 	}
 }
