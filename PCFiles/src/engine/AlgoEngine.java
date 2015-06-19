@@ -84,7 +84,7 @@ public class AlgoEngine {
 			state = "FETCHING";
 		case "FETCHING":
 			/* FETCHING
-			 * yes
+			 * yes 
 			 * */
 			robotV = new Vector2D(robot[1], robot[0]);
 			courseV = new Vector2D(robot[0], targetBall);
