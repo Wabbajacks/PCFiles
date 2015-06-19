@@ -9,9 +9,12 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * GUI for robot movements.
+ * GUI for robot movements.<br><br>
  * 
- * Draws all movements passed to the robot.
+ * Draws all movements passed to the robot.<br><br>
+ * 
+ * Uses MigLayout as layout manager.<br>
+ * @see <a href="http://www.miglayout.com/QuickStart.pdf">MigLayout QuickStart guide</a>
  * 
  * @author Kristin Hansen
  */
@@ -38,6 +41,7 @@ public class GUI extends JPanel {
 		cp = new ConsolePanel();
 		bp = new ButtonPanel();
 		
+		// Add events to each button
 		bp.getClearLinesButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -56,6 +60,14 @@ public class GUI extends JPanel {
 			
 		});
 		
+		bp.getClearActiveButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearActive();
+			}
+		});
+		
+		// Add panels to frame
 		add(ip, "wrap, span");
 		add(cp);
 		add(bp);
@@ -119,5 +131,21 @@ public class GUI extends JPanel {
 	 */
 	public void clearLines() {
 		ip.clearLines();
+	}
+	
+	/**
+	 * Draws a circle around the current ball that the robot pursues.<br>
+	 * 
+	 * @param active The center coordinates of the ball.
+	 */
+	public void drawActive(Point active) {
+		ip.drawActive(active);
+	}
+	
+	/**
+	 * Clears the current active ball.
+	 */
+	public void clearActive() {
+		ip.clearActive();
 	}
 }

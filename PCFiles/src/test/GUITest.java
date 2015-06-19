@@ -19,11 +19,16 @@ public class GUITest {
 	    	gui = GUI.getInstance();
 	    	
 	    	Thread.sleep(1500);
+
+			gui.addTxt("Drawing a circle at coordinates: [300,300]");
+	        gui.drawActive(new Point(300,300));
 	        
-	    	gui.addTxt("Adding line with cooardinates: [10,10], [100,100]");
-	        gui.drawLine(new Point(10,10), new Point(100,100));
+	        Thread.sleep(6000);
 	        
-	        Thread.sleep(1500);
+	        gui.addTxt("Removing current active ball.");
+	        gui.clearActive();
+	        
+	        Thread.sleep(1000);
 	        
 	        gui.addTxt("Adding line with cooardinates: [100,100], [50,200]");
 	        gui.drawLine(new Point(100,100), new Point(50,200));

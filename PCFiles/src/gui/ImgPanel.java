@@ -32,6 +32,7 @@ public class ImgPanel extends JPanel {
 	private TitledBorder title;
 	private JLayeredPane lpane;
 	private LinesPanel lines;
+	private CirclesPanel circle;
 	
 	private final String DEFAULT_IMAGE_PATH = "images/scrCap.jpg";
 	
@@ -65,12 +66,20 @@ public class ImgPanel extends JPanel {
 		lines.setBounds(image.getBounds());
 		lines.setOpaque(false);
 		
+		circle = new CirclesPanel();
+		circle.setMinimumSize(image.getMinimumSize());
+		circle.setPreferredSize(image.getPreferredSize());
+		circle.setMaximumSize(image.getMaximumSize());
+		circle.setBounds(image.getBounds());
+		circle.setOpaque(false);
+		
 		title = new TitledBorder("Latest image");
 		title.setTitleFont(new Font("Arial", 1, 14));
 		title.setTitleColor(Color.decode("#FFFFFF"));
 		
 		lpane.add(image, 0, 0);
-		lpane.add(lines, 1, 0);
+		lpane.add(circle, 1, 0);
+		lpane.add(lines, 2, 0);
 		
 		setBorder(title);
 		
@@ -103,5 +112,13 @@ public class ImgPanel extends JPanel {
 
 	public void clearLines() {
 		lines.clearLines();
+	}
+	
+	public void drawActive(Point active) {
+		circle.drawActive(active);
+	}
+
+	public void clearActive() {
+		circle.clearActive();
 	}
 }

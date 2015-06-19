@@ -14,6 +14,7 @@ import net.miginfocom.swing.MigLayout;
  * Contains buttons used by GUI. Add events to the buttons with the get-methods for each button
  * <ul>
  * <li>{@link #getClearLinesButton()}</li>
+ * <li>{@link #getClearActiveButton()}</li>
  * <li>{@link #getUpdateImageButton()}</li>
  * </ul>
  * 
@@ -23,6 +24,7 @@ public class ButtonPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JButton clearLinesButton;
+	private JButton clearActiveButton;
 	private JButton updateImageButton;
 
 	public ButtonPanel() {
@@ -36,9 +38,11 @@ public class ButtonPanel extends JPanel {
 		setBackground(Color.decode("#333333"));
 		
 		clearLinesButton = new JButton("Clear lines");
+		clearActiveButton = new JButton("Clear active ball");
 		updateImageButton = new JButton("Update image");
 		
 		add(clearLinesButton, "wrap");
+		add(clearActiveButton, "wrap");
 		add(updateImageButton);
 	}
 
@@ -48,5 +52,9 @@ public class ButtonPanel extends JPanel {
 
 	public JButton getUpdateImageButton() {
 		return updateImageButton;
+	}
+	
+	public JButton getClearActiveButton() {
+		return clearActiveButton;
 	}
 }
