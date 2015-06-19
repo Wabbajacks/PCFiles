@@ -125,7 +125,7 @@ public class AlgoEngine {
 				courseV = new Vector2D(robot[0], new Point2D(obst[0].getX()+i, robot[0].getY()));
 			}
 			
-			state = "FETCHING";
+			//state = "FETCHING";
 			
 			break;
 			
@@ -134,7 +134,7 @@ public class AlgoEngine {
 			
 				case "DELIVERROUTE":
 					deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
-					courseV = new Vector2D(goals[0].getX()+GD, goals[0].getY());
+					courseV = new Vector2D(deliverP2D.getX(), goals[0].getY());
 					robotV = new Vector2D(robot[1], robot[0]);
 					
 					if(checkInterSection(obst, robot[0], deliverP2D)){
