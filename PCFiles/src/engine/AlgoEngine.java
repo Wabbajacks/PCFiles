@@ -28,6 +28,7 @@ public class AlgoEngine {
 	Vector2D robotV;
 	Vector2D courseV;
 	ImgCap camInfo = new ImgCap();
+	int ballsCollected;
 
 	List<String> commands;
 	/* TODO:
@@ -52,6 +53,7 @@ public class AlgoEngine {
 		state = "START";
 //		robotV = null;
 		courseV = null;
+		ballsCollected = 0;
 		
 		robot_start = new Point2D(0, 0);
 		
@@ -88,19 +90,12 @@ public class AlgoEngine {
 			courseV = new Vector2D(robot[0], targetBall);
 			if(checkInterSection(obst, robot[0], targetBall)){
 				state = "REDIRECTED";
-				// Should probably be moved to REDIRECTED 
-				if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
-					int i = 50;
-					if (obst[0].getY() < robot[0].getY()) i = -50;
-					courseV = new Vector2D(robot[0], new Point2D(robot[0].getX(), obst[0].getY()+i));
-				} else {
-					int i = 50;
-					if (obst[0].getX() < robot[0].getX()) i = -50;
-					courseV = new Vector2D(robot[0], new Point2D(obst[0].getX()+i, robot[0].getY()));
-				}
 				break;
 			}
 			int degree = degree(robotV, courseV);
+			// turn(degree) here and move forward to ball
+			ballsCollected++;
+			
 			
 			break;
 		case "REDIRECTED":
@@ -108,19 +103,43 @@ public class AlgoEngine {
 			 * When the Robot is trying to move trough the obstacle in the middle it should be put in this state,
 			 * moving at a redirected course, moving around the obstacle in the middle,
 			 * so when it reaches its goal it should not increment the BallCatchCounter*/
+			if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
+				int i = 50;
+				if (obst[0].getY() < robot[0].getY()) i = -50;
+				courseV = new Vector2D(robot[0], new Point2D(robot[0].getX(), obst[0].getY()+i));
+			} else {
+				int i = 50;
+				if (obst[0].getX() < robot[0].getX()) i = -50;
+				courseV = new Vector2D(robot[0], new Point2D(obst[0].getX()+i, robot[0].getY()));
+			}
 			
+			state = "FETCHING";
 			
 			break;
 		case "DELIVER":
 			switch(state){
 			
 				case "DELIVERROUTE":
-					courseV = new Vector2D();
+					courseV = new Vector2D(camInfo.picAnal().getGoals()[0].getX()+50, camInfo.picAnal().getGoals()[0].getY());
 					robotV = new Vector2D(robot[1], robot[0]);
 					degree(robotV, courseV);
+					
+					// Turn(degree) should be here + move forward
+					
+					if(robot[0].getX() == camInfo.picAnal().getGoals()[0].getX()+50 && robot[0].getY() == camInfo.picAnal().getGoals()[0].getY()){
+						courseV = new Vector2D();
+						robotV = new Vector2D(robot[1], robot[0]);
+						degree(robotV, courseV);
+						
+						// Turn(degree) should be made here
+						
+						state = "DELIVERBALLS";
+						
+					}
 					break;
 					
 				case "DELIVERBALLS": 
+					// Make 2 engine go the opposite direction to spit out all the balls
 					break;
 				default:
 					System.out.println("Something went wrong in deliver");
@@ -135,6 +154,8 @@ public class AlgoEngine {
 		case "FINNISHED":
 			/* FINNISHED
 			 * When there is no more balls let on the fields it should go to this state.
+			 * 
+			 * Remember to release cam when finished.
 			 * */
 			break;
 		default:
@@ -186,8 +207,17 @@ public class AlgoEngine {
 	 */
 	public static int degree (Vector2D l, Vector2D j) {
 		int degree = 0;
+		// turnR = true;
 		
 		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
+		
+		/* Maybe check it here
+		if(degree > 180) {
+			degree = 360-degree;
+			turnR = false;
+			
+		}
+		*/
 		
 		return degree;
 	}
