@@ -34,20 +34,20 @@ public class ImgCap {
 		//Timer start
 		long startTime = System.nanoTime();
 		
-		//Picture start//
+		/*Picture start*/
 		Mat image = new Mat();	
 		//picture from file//
-		String filePath = "C:\\cdio\\41.bmp";
-		image = Highgui.imread(filePath,1);
-		//picture from cam//
-//		if (webCam.isOpened()) {
-//			webCam.read(image);
-//		} else {
-//			webCam = new VideoCapture();
-//			webCam.open(0); //0 for jbn, 1 for bækhøj
-//			webCam.read(image);
-//		}
-		//Picture end//
+//		String filePath = "C:\\cdio\\41.bmp";
+//		image = Highgui.imread(filePath,1);
+		/*picture from cam*/
+		if (webCam.isOpened()) {
+			webCam.read(image);
+		} else {
+			webCam = new VideoCapture();
+			webCam.open(1); //0 for jbn, 1 for bækhøj
+			webCam.read(image);
+		}
+		/*Picture end*/
 		
 
 		Mat circles = new Mat();
@@ -232,7 +232,7 @@ public class ImgCap {
 		}
 		
         //TODO releaseCam skal først kaldes ved program slut. 
-		releaseCam();
+//		releaseCam();
 		//return an info object
 		return new ImgInfo(ballSet,new Point2D[]{obstacleTopLeft, obstacleBottomRight},p2DCorners,new Point2D[]{robotF,robotB}, goal);
 	} 
