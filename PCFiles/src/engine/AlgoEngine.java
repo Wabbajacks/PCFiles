@@ -215,7 +215,7 @@ public class AlgoEngine {
 	 * @param j Should always be the vector from the robot to the ball
 	 * @return Degree from l to j counterclockwise
 	 */
-	public static int degree (Vector2D l, Vector2D j) {
+	private int degree (Vector2D l, Vector2D j) {
 		int degree = 0;
 		
 		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
