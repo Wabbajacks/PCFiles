@@ -239,7 +239,7 @@ public class ImgCap {
 		
 		Highgui.imwrite("images\\scrCap.jpg",image);
         long endTime = System.nanoTime();
-		System.out.println((endTime-startTime)/1000000);
+//		System.out.println((endTime-startTime)/1000000);
 
 		//TODO releaseCam skal først kaldes ved program slut. 
 //		releaseCam();

@@ -83,7 +83,7 @@ public class DriverEngine {
 			ImgInfo camInfo = cam.picAnal();
 			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame(), camInfo.getObstacle(), camInfo.getGoals());
 			for (String s : algo.getInstruction()){
-				System.out.print(s + " ");
+				System.out.println(s + " ");
 			}
 //			System.out.println();
 			
@@ -94,9 +94,11 @@ public class DriverEngine {
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					break;
 				}
 			}
 		}
+		//cam.releaseCam();
 		/* TO here */
 
 		/* Dummy data test */ 

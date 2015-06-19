@@ -109,10 +109,11 @@ public class AlgoEngine {
 			
 			break;
 		case "REDIRECTED":
+			
 			/* REDIRECTED
 			 * When the Robot is trying to move trough the obstacle in the middle it should be put in this state,
 			 * moving at a redirected course, moving around the obstacle in the middle,
-			 * so when it reaches its goal it should not increment the BallCatchCounter*/
+			 * so when it reaches its goal it should not increment the BallCatchCounter
 			if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
 				int i = 50;
 				if (obst[0].getY() < robot[0].getY()) i = -50;
@@ -126,6 +127,7 @@ public class AlgoEngine {
 			state = "FETCHING";
 			
 			break;
+			*/
 		case "DELIVER":
 			switch(state){
 			
@@ -245,8 +247,14 @@ public class AlgoEngine {
 	private int degree (Vector2D l, Vector2D j) {
 		int degree = 0;
 		
-		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
+		int dotProdukt = (int) Vector2D.dot(l, j);
 		
+		int kvadratrodL = (int) Math.sqrt((l.getX() * l.getX()) + (l.getY() * l.getY()));
+		
+		int kvadratrodJ = (int) Math.sqrt((j.getX() * j.getX()) + (j.getY() * j.getY()));
+		
+		degree = (int) Math.acos(dotProdukt/(kvadratrodL*kvadratrodJ));
+		System.out.println(degree);
 		return degree;
 	}
 	
