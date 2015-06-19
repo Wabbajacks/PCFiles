@@ -34,24 +34,24 @@ public class DriverEngine {
 	 * 
 	 */
 	public DriverEngine(){
-		try {
-			con = new PCConn("00165304789F");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			con = new PCConn("00165304789F");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		algo = new AlgoEngine();
 		cam = new ImgCap();
 		engine();
 		
 		// Start GUI
-		createAndShowGUI();
-		
-		// Get instance of GUI
-		gui = GUI.getInstance();
-		
-		// Set initial image in gui
-		gui.updateImage();
+//		createAndShowGUI();
+//		
+//		// Get instance of GUI
+//		gui = GUI.getInstance();
+//		
+//		// Set initial image in gui
+//		gui.updateImage();
 	}
 	
 	private void createAndShowGUI() {
@@ -85,11 +85,12 @@ public class DriverEngine {
 			for (String s : algo.getInstruction()){
 				System.out.print(s + " ");
 			}
-			System.out.println();
+//			System.out.println();
 			
 			for(String s : algo.getInstruction()) {
 				try {
-					con.sendCommand(s);
+//					System.out.println(s);
+//					con.sendCommand(s);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
