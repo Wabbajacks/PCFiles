@@ -93,7 +93,17 @@ public class AlgoEngine {
 				break;
 			}
 			int degree = degree(robotV, courseV);
-			// turn(degree) here and move forward to ball
+			
+			if(turnRight(degree)==true) {
+				//Turn right(degree)
+			}
+			else{
+				degree = 360-degree;
+				//Turn left(degree)
+			}
+			
+			// Drive forward here
+			
 			ballsCollected++;
 			
 			
@@ -207,20 +217,22 @@ public class AlgoEngine {
 	 */
 	public static int degree (Vector2D l, Vector2D j) {
 		int degree = 0;
-		// turnR = true;
 		
 		degree = (int) Math.acos(((Vector2D.dot(l, j))/(Math.sqrt((l.x()*l.x())+(l.y()*l.y())+(Math.sqrt((j.x()*j.x()) + (j.y()*j.y())))))));
 		
-		/* Maybe check it here
-		if(degree > 180) {
-			degree = 360-degree;
-			turnR = false;
-			
-		}
-		*/
-		
 		return degree;
 	}
+	
+	private boolean turnRight(int degree){
+		boolean turnR = true;
+		
+		if(degree>180){
+			turnR=false;
+		}
+		
+		return turnR;
+	}
+	
 	
 	private boolean checkInterSection(Point2D[] obst, Point2D startL, Point2D endL) {
 		Rectangle2D r = new Rectangle2D.Double(obst[0].getX(), obst[0].getY(), (obst[1].getX()-obst[0].getX()), (obst[0].getY()-obst[1].getY()));
