@@ -13,19 +13,19 @@ public class MovStressTest {
 			
 			System.out.println("Starting test...");
 			
-			conn.sendCommand("fw");
+			System.out.println(conn.sendCommand("fw"));
 			
 			Thread.sleep(400);
 			
-			conn.sendCommand("br");
+			System.out.println(conn.sendCommand("br"));
 			
 			Thread.sleep(200);
 			
-			conn.sendCommand("bw");
+			System.out.println(conn.sendCommand("bw"));
 			
 			Thread.sleep(300);
 			
-			conn.sendCommand("END");
+			System.out.println(conn.sendCommand("br"));
 			
 			System.out.println("Trying to close NXT connection...");
 			
