@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Graph {
 	private Node[] nodes;
 	
-	@SuppressWarnings("unchecked")
 	public Graph(ArrayList<Integer[]> bolde) {
 		int size = bolde.size();
 		nodes = new Node[size];
