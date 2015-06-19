@@ -90,7 +90,7 @@ public class AlgoEngine {
 				state = "REDIRECTED";
 				break;
 			}
-			int degree = degree(robotV, courseV);
+			double degree = degree(robotV, courseV);
 			
 			if(turnRight(degree)==true) {
 				// Turn right
@@ -114,6 +114,7 @@ public class AlgoEngine {
 			 * When the Robot is trying to move trough the obstacle in the middle it should be put in this state,
 			 * moving at a redirected course, moving around the obstacle in the middle,
 			 * so when it reaches its goal it should not increment the BallCatchCounter
+			 */
 			if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
 				int i = 50;
 				if (obst[0].getY() < robot[0].getY()) i = -50;
@@ -127,12 +128,12 @@ public class AlgoEngine {
 			state = "FETCHING";
 			
 			break;
-			*/
+			
 		case "DELIVER":
 			switch(state){
 			
 				case "DELIVERROUTE":
-				/*	deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
+					deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
 					courseV = new Vector2D(goals[0].getX()+GD, goals[0].getY());
 					robotV = new Vector2D(robot[1], robot[0]);
 					
@@ -176,9 +177,10 @@ public class AlgoEngine {
 	
 					}
 					break;
-					*/
+					
 				case "DELIVERBALLS": 
 					// Make 2 engine go the opposite direction to spit out all the balls
+					// start engine 2 again when done
 					break;
 				default:
 					System.out.println("Something went wrong in deliver");
@@ -244,21 +246,21 @@ public class AlgoEngine {
 	 * @param j Should always be the vector from the robot to the ball
 	 * @return Degree from l to j counterclockwise
 	 */
-	private int degree (Vector2D l, Vector2D j) {
-		int degree = 0;
+	private double degree (Vector2D l, Vector2D j) {
+		double degree = 0;
 		
-		int dotProdukt = (int) Vector2D.dot(l, j);
+		double dotProdukt = Vector2D.dot(l, j);
 		
-		int kvadratrodL = (int) Math.sqrt((l.getX() * l.getX()) + (l.getY() * l.getY()));
+		double kvadratrodL = Math.sqrt((l.getX() * l.getX()) + (l.getY() * l.getY()));
 		
-		int kvadratrodJ = (int) Math.sqrt((j.getX() * j.getX()) + (j.getY() * j.getY()));
+		double kvadratrodJ = Math.sqrt((j.getX() * j.getX()) + (j.getY() * j.getY()));
 		
-		degree = (int) Math.acos(dotProdukt/(kvadratrodL*kvadratrodJ));
+		degree = Math.acos(dotProdukt/(kvadratrodL*kvadratrodJ));
 		System.out.println(degree);
 		return degree;
 	}
 	
-	private boolean turnRight(int degree){
+	private boolean turnRight(double degree){
 		boolean turnR = false;
 		
 		if(degree>180){

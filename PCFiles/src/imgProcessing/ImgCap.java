@@ -27,7 +27,7 @@ public class ImgCap {
 	public ImgCap() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		webCam = new VideoCapture();
-		webCam.open(0); //0 for jbn, 1 for bækhøj
+		webCam.open(0); //0 for jbn, 1 for bï¿½khï¿½j
 	}
 	
 	@SuppressWarnings({ "deprecation", "static-access" })
@@ -45,7 +45,7 @@ public class ImgCap {
 			webCam.read(image);
 		} else {
 			webCam = new VideoCapture();
-			webCam.open(1); //0 for jbn, 1 for bækhøj
+			webCam.open(1); //0 for jbn, 1 for bï¿½khï¿½j
 			webCam.read(image);
 		}
 		/*Picture end*/
@@ -241,7 +241,7 @@ public class ImgCap {
         long endTime = System.nanoTime();
 //		System.out.println((endTime-startTime)/1000000);
 
-		//TODO releaseCam skal først kaldes ved program slut. 
+		//TODO releaseCam skal fï¿½rst kaldes ved program slut. 
 //		releaseCam();
 		
 		//return an info object
