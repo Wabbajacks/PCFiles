@@ -20,6 +20,7 @@ import math.geom2d.Vector2D;
  *
  */
 public class AlgoEngine {
+	final int GD;
 	Point2D targetBall;
 	Point2D robot_start;	
 	int tolerance;
@@ -27,7 +28,7 @@ public class AlgoEngine {
 	String state;
 	Vector2D robotV;
 	Vector2D courseV;
-	ImgCap camInfo = new ImgCap();
+	Point2D deliverP2D;
 	int ballsCollected;
 
 	List<String> commands;
@@ -54,6 +55,7 @@ public class AlgoEngine {
 //		robotV = null;
 		courseV = null;
 		ballsCollected = 0;
+		GD = 50;
 		
 		robot_start = new Point2D(0, 0);
 		
@@ -84,7 +86,7 @@ public class AlgoEngine {
 			state = "FETCHING";
 		case "FETCHING":
 			/* FETCHING
-			 * yes 
+			 * yes
 			 * */
 			robotV = new Vector2D(robot[1], robot[0]);
 			courseV = new Vector2D(robot[0], targetBall);
@@ -95,14 +97,16 @@ public class AlgoEngine {
 			int degree = degree(robotV, courseV);
 			
 			if(turnRight(degree)==true) {
-				//Turn right(degree)
+				// Turn right
+				degree = 360-degree;
+				commands.add("C_TR " + degree);
 			}
 			else{
-				degree = 360-degree;
-				//Turn left(degree)
+				// Turn left
+				commands.add("C_TL " + degree);
 			}
 			
-			// Drive forward here
+			commands.add("C_FW");
 			
 			ballsCollected++;
 			
@@ -130,21 +134,49 @@ public class AlgoEngine {
 			switch(state){
 			
 				case "DELIVERROUTE":
-					courseV = new Vector2D(camInfo.picAnal().getGoals()[0].getX()+50, camInfo.picAnal().getGoals()[0].getY());
+					deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
+					courseV = new Vector2D(goals[0].getX()+GD, goals[0].getY());
 					robotV = new Vector2D(robot[1], robot[0]);
 					degree(robotV, courseV);
 					
-					// Turn(degree) should be here + move forward
-					
-					if(robot[0].getX() == camInfo.picAnal().getGoals()[0].getX()+50 && robot[0].getY() == camInfo.picAnal().getGoals()[0].getY()){
-						courseV = new Vector2D();
-						robotV = new Vector2D(robot[1], robot[0]);
-						degree(robotV, courseV);
+					if(checkInterSection(obst, robot[0], deliverP2D)){
+						courseV = new Vector2D(deliverP2D.getX(), robot[1].getX());
+						robotV = new Vector2D(robot[1],robot[0]);
 						
-						// Turn(degree) should be made here
+						degree = degree(robotV, courseV);
+						
+						if(turnRight(degree)==true) {
+							// Turn right
+							degree = 360-degree;
+							commands.add("C_TR " + degree);
+						}
+						else{
+							// Turn left
+							commands.add("C_TL " + degree);
+						}
+						
+						commands.add("C_FW");
+						
+						break;
+					}
+					
+					if(robot[0].getX() == goals[0].getX()+GD && robot[0].getY() == goals[0].getY()){
+						courseV = new Vector2D(goals[0].getX(), goals[0].getY());
+						robotV = new Vector2D(robot[1], robot[0]);
+						degree = degree(robotV, courseV);
+						
+						if(turnRight(degree)==true) {
+							// Turn right
+							degree = 360-degree;
+							commands.add("C_TR " + degree);
+						}
+						else{
+							// Turn left
+							commands.add("C_TL " + degree);
+						}
 						
 						state = "DELIVERBALLS";
-						
+	
 					}
 					break;
 					
@@ -224,10 +256,10 @@ public class AlgoEngine {
 	}
 	
 	private boolean turnRight(int degree){
-		boolean turnR = true;
+		boolean turnR = false;
 		
 		if(degree>180){
-			turnR=false;
+			turnR=true;
 		}
 		
 		return turnR;
