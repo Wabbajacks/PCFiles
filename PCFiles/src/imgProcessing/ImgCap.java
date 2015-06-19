@@ -94,7 +94,7 @@ public class ImgCap {
         /***************************************************************/
         /******************Run through the picture**********************/
 		for (int y = 0; y <rows; y=y+3) {
-			for (int x = 0;x<cols;x=x+3){
+			for (int x = 0;x<cols;x=x+4){
 				double color[] = {image.get(y,x)[0],image.get(y,x)[1],image.get(y,x)[2]};
 					if (color[0]+100< color[2] && color[2]-50 > color[1]) {	
 					if (x>100 && x<540 && y>100 && y<380){
