@@ -81,7 +81,7 @@ public class DriverEngine {
 		/* The only thing the engine should be running in a loop */ 
 		while(true){
 			ImgInfo camInfo = cam.picAnal();
-			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame());
+			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame(), camInfo.getObstacle(), camInfo.getGoals());
 			for (String s : algo.getInstruction()){
 				System.out.print(s + " ");
 			}

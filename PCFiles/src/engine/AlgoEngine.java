@@ -68,10 +68,6 @@ public class AlgoEngine {
 	 * @param balls - Point2D[] of all the balls coordinates
 	 * @param robot - Point2D[] of the robots coordinates
 	 */
-	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall){
-		//REMOVE THIS SHIT!
-		commands.clear();
-	}
 	
 	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall, Point2D[] obst, Point2D[] goals){
 		// Obstacle can be made into a rectangle if needed
