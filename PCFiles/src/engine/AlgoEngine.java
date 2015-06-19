@@ -2,6 +2,8 @@ package engine;
 
 //import java.awt.geom.Line2D;
 //import java.awt.geom.Point2D;
+import imgProcessing.ImgCap;
+
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class AlgoEngine {
 	String state;
 	Vector2D robotV;
 	Vector2D courseV;
+	ImgCap camInfo = new ImgCap();
 
 	List<String> commands;
 	/* TODO:
@@ -85,7 +88,7 @@ public class AlgoEngine {
 			courseV = new Vector2D(robot[0], targetBall);
 			if(checkInterSection(obst, robot[0], targetBall)){
 				state = "REDIRECTED";
-				
+				// Should probably be moved to REDIRECTED 
 				if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
 					int i = 50;
 					if (obst[0].getY() < robot[0].getY()) i = -50;
@@ -109,8 +112,22 @@ public class AlgoEngine {
 			
 			break;
 		case "DELIVER":
+			switch(state){
+			
+				case "DELIVERROUTE":
+					courseV = new Vector2D();
+					robotV = new Vector2D(robot[1], robot[0]);
+					degree(robotV, courseV);
+					break;
+					
+				case "DELIVERBALLS": 
+					break;
+				default:
+					System.out.println("Something went wrong in deliver");
+					break;
+			}
 			/* DELIVER should have 2 states, and should be in this state when the BallCatchCounter is at its limit:
-			 * State 1: driver over to the front of the goal coordinate (like +-20 to x-axis)
+			 * State 1: driver over to the front of the goal coordinate (like +-50 to x-axis)
 			 * State 2: only change the direction so the vectors is parallel (where courseV is directly to the goal,
 			 * 	and then VOMIT ALL OVER THAT GOAL!! */
 			//Left goal is little goal
