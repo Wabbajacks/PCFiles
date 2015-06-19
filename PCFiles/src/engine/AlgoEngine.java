@@ -130,7 +130,7 @@ public class AlgoEngine {
 			switch(state){
 			
 				case "DELIVERROUTE":
-					deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
+				/*	deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
 					courseV = new Vector2D(goals[0].getX()+GD, goals[0].getY());
 					robotV = new Vector2D(robot[1], robot[0]);
 					
@@ -174,7 +174,7 @@ public class AlgoEngine {
 	
 					}
 					break;
-					
+					*/
 				case "DELIVERBALLS": 
 					// Make 2 engine go the opposite direction to spit out all the balls
 					break;
