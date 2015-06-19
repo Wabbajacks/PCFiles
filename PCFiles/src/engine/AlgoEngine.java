@@ -92,6 +92,8 @@ public class AlgoEngine {
 			}
 			int degree = degree(robotV, courseV);
 			
+			commands.add("C_TR" + 500);
+			
 			if(turnRight(degree)==true) {
 				// Turn right
 				degree = 360-degree;
@@ -133,7 +135,6 @@ public class AlgoEngine {
 					deliverP2D = new Point2D(goals[0].getX()+GD, goals[0].getY());
 					courseV = new Vector2D(goals[0].getX()+GD, goals[0].getY());
 					robotV = new Vector2D(robot[1], robot[0]);
-					degree(robotV, courseV);
 					
 					if(checkInterSection(obst, robot[0], deliverP2D)){
 						courseV = new Vector2D(deliverP2D.getX(), robot[1].getX());
