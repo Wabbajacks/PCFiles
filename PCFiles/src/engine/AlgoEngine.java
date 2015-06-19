@@ -84,9 +84,19 @@ public class AlgoEngine {
 			/* FETCHING
 			 * yes
 			 * */
+			setNearestBall(balls, robot, wall, obst);
 			robotV = new Vector2D(robot[1], robot[0]);
 			courseV = new Vector2D(robot[0], targetBall);
 			if(checkInterSection(obst, robot[0], targetBall)){
+				if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
+					int i = 50;
+					if (obst[0].getY() < robot[0].getY()) i = -50;
+					courseV = new Vector2D(robot[0], new Point2D(robot[0].getX(), obst[0].getY()+i));
+				} else {
+					int i = 50;
+					if (obst[0].getX() < robot[0].getX()) i = -50;
+					courseV = new Vector2D(robot[0], new Point2D(obst[0].getX()+i, robot[0].getY()));
+				}
 				state = "REDIRECTED";
 				break;
 			}
@@ -101,6 +111,9 @@ public class AlgoEngine {
 				// Turn left
 				commands.add("C_TL " + degree);
 			}
+			if(degree < tolerance ){
+				commands.add("FW");
+			} else commands.add("BR");
 			
 			//commands.add("C_FW");
 			
@@ -113,17 +126,10 @@ public class AlgoEngine {
 			/* REDIRECTED
 			 * When the Robot is trying to move trough the obstacle in the middle it should be put in this state,
 			 * moving at a redirected course, moving around the obstacle in the middle,
-			 * so when it reaches its goal it should not increment the BallCatchCounter
+			 * so when it reaches its goal it should not increment the BallCatchCounter and should then go
+			 * to FETCHING state again.
 			 */
-			if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
-				int i = 50;
-				if (obst[0].getY() < robot[0].getY()) i = -50;
-				courseV = new Vector2D(robot[0], new Point2D(robot[0].getX(), obst[0].getY()+i));
-			} else {
-				int i = 50;
-				if (obst[0].getX() < robot[0].getX()) i = -50;
-				courseV = new Vector2D(robot[0], new Point2D(obst[0].getX()+i, robot[0].getY()));
-			}
+			
 			
 			//state = "FETCHING";
 			
@@ -254,9 +260,9 @@ public class AlgoEngine {
 		double kvadratrodL = Math.sqrt((l.getX() * l.getX()) + (l.getY() * l.getY()));
 		
 		double kvadratrodJ = Math.sqrt((j.getX() * j.getX()) + (j.getY() * j.getY()));
-		
+
 		degree = Math.acos(dotProdukt/(kvadratrodL*kvadratrodJ));
-		System.out.println(degree);
+		degree = degree*180 / Math.PI;
 		return degree;
 	}
 	

@@ -27,7 +27,7 @@ public class ImgCap {
 	public ImgCap() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		webCam = new VideoCapture();
-		webCam.open(0); //0 for jbn, 1 for b�kh�j
+		webCam.open(1); //0 for jbn, 1 for b�kh�j
 	}
 	
 	@SuppressWarnings({ "deprecation", "static-access" })
