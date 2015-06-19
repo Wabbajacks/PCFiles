@@ -34,7 +34,12 @@ public class DriverEngine {
 	 * 
 	 */
 	public DriverEngine(){
-		con = new PCConn("00165304789F");
+		try {
+			con = new PCConn("00165304789F");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		algo = new AlgoEngine();
 		cam = new ImgCap();
 		engine();
@@ -81,11 +86,14 @@ public class DriverEngine {
 				System.out.print(s + " ");
 			}
 			System.out.println();
-			try {
-				con.sendMsg(algo.getInstruction());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			
+			for(String s : algo.getInstruction()) {
+				try {
+					con.sendCommand(s);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		/* TO here */
