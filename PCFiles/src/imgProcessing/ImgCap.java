@@ -50,7 +50,7 @@ public class ImgCap {
 		}
 		/*Picture end*/
 		
-		//Instantiating instances
+		//Instantiating matrix
 		Mat shapes = new Mat();
 		Mat grayImg = new Mat(image.rows(),image.cols(),image.type());
 		Scalar scalarColorB = new Scalar(0,0,0); // black scalar
@@ -66,7 +66,7 @@ public class ImgCap {
 		int obstacleMinX = cols;
 		int obstacleMaxX = 0;
 		
-		//instantiating arrays for robot positions
+		//instantiating arrays for robot color positions
 		int[] robotFront = {0,0,0};
 		int[] robotBack = {0,0,0};	
 		
@@ -74,11 +74,25 @@ public class ImgCap {
         Point pt = new Point();
         Point2D pt2D = new Point2D();
         
-        //Instantiating frame variables
+		//instantiating shape variables
+        //lines
+        double d;
+        double xi;
+		double yi;
+		double x1, y1, x2, y2, x3, y3, x4, y4;
+		double[] vec = new double[4];
+		double[] jvec = new double[4];
+		double[] vCircle = new double[3];
+		//circles
+        int radius;
+		ArrayList<Point2D> ballSet = new ArrayList<Point2D>();
+        
+		//Instantiating frame variables
         Point2D[] goal = new Point2D[2];
         Point2D[] p2DCorners = {new Point2D(0,0), new Point2D(cols,0), new Point2D(0,rows), new Point2D(cols,rows)};        
 
-        //run through the picture
+        /***************************************************************/
+        /******************Run through the picture**********************/
 		for (int y = 0; y <rows; y=y+3) {
 			for (int x = 0;x<cols;x=x+3){
 				double color[] = {image.get(y,x)[0],image.get(y,x)[1],image.get(y,x)[2]};
@@ -109,7 +123,8 @@ public class ImgCap {
 				} 		
 			}
 		}
-
+		/***************************************************************/
+		
 		// Documentation for opencv methods and paramenters - http://docs.opencv.org/modules/imgproc/doc/feature_detection.html
 		// Picture processing
 		Imgproc.cvtColor(image, grayImg, Imgproc.COLOR_BGRA2GRAY); 
@@ -122,22 +137,22 @@ public class ImgCap {
         for( int i = 0; i < shapes.cols(); i++ )
         {
         	//Line coordinate sets (frame)
-            double[] vec = shapes.get(0, i);
-            double x1 = vec[0], 
-                   y1 = vec[1],
-                   x2 = vec[2],
-                   y2 = vec[3];
+        	vec = shapes.get(0, i);
+        	x1 = vec[0]; 
+        	y1 = vec[1];
+			x2 = vec[2];
+			y2 = vec[3];
             if(((x1 < 75 || x1 > 565) && (y1 < 75 || y1 > 405)) || ((x2 < 75 || x2 > 565) && (y2 < 75 || y2 > 405))) {
     		    for(int j = i+1; j < shapes.cols(); j++ ) {
-    	            double[] jvec = shapes.get(0, j);
-    	            double x3 = jvec[0], 
-    	                   y3 = jvec[1],
-    	                   x4 = jvec[2],
-    	                   y4 = jvec[3];
-    	    		double d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    	            jvec = shapes.get(0, j);
+    	            x3 = jvec[0]; 
+	            	y3 = jvec[1];
+	            	x4 = jvec[2];
+	            	y4 = jvec[3];
+    	    		d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
     	    		if (d != 0) {
-    		    		double xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
-    		    		double yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
+    		    		xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
+    		    		yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
     		    		if (xi > 0 && xi<640 && yi > 0 && yi< 480) {
     		    			if (xi < 75 && yi < 75) {
     		    				if (xi >=  p2DCorners[0].getX() && yi >= p2DCorners[0].getY()) {
@@ -168,13 +183,11 @@ public class ImgCap {
 
         /***************************************************************/
         /***************circles finding (balls)*************************/
-		ArrayList<Point2D> ballSet = new ArrayList<Point2D>();
 		Imgproc.HoughCircles(grayImg, shapes, Imgproc.CV_HOUGH_GRADIENT, 1, 15, 10, 20, 3, 10);
-		int radius;
         for (int x = 0; x < shapes.cols(); x++) {
-        	double vCircle[] = shapes.get(0,x);
+        	vCircle = shapes.get(0,x);
         	if (vCircle == null) {
-        		//TODO
+        		//TODO return so that we know that there are no more balls
         		System.err.println("no circles found");
 	            break;
 	        }
@@ -230,6 +243,7 @@ public class ImgCap {
 
 		//TODO releaseCam skal først kaldes ved program slut. 
 //		releaseCam();
+		
 		//return an info object
 		return new ImgInfo(ballSet,new Point2D[]{obstacleTopLeft, obstacleBottomRight},p2DCorners,new Point2D[]{robotF,robotB}, goal);
 	} 
