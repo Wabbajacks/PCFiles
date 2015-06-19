@@ -92,8 +92,6 @@ public class AlgoEngine {
 			}
 			int degree = degree(robotV, courseV);
 			
-			commands.add("C_TR" + 500);
-			
 			if(turnRight(degree)==true) {
 				// Turn right
 				degree = 360-degree;
@@ -104,7 +102,7 @@ public class AlgoEngine {
 				commands.add("C_TL " + degree);
 			}
 			
-			commands.add("C_FW");
+			//commands.add("C_FW");
 			
 			ballsCollected++;
 			
