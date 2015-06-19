@@ -48,10 +48,13 @@ public class ImgCap {
 			webCam.read(image);
 		}
 		/*Picture end*/
+		//img2 for testing purposes
+		Mat image2 = image.clone();
 		
-
 		Mat circles = new Mat();
 		Mat grayImg = new Mat(image.rows(),image.cols(),image.type());
+		Scalar scalarColorB = new Scalar(0,0,0); // black scalar
+		Scalar scalarColorT = new Scalar(0,255,0); //T scalar, initial color = green
 		int rows = image.height();
 		int cols = image.width();
 		int obstacleMinY = rows;
@@ -69,7 +72,7 @@ public class ImgCap {
 				Integer[] tempArr = new Integer[2];
 				tempArr[0] = x;
 				tempArr[1] = y;
-					if (color[0]+100< color[2]) {	
+					if (color[0]+100< color[2] && color[2]-50 > color[1]) {	
 					if (x>100 && x<540 && y>100 && y<380){
 						System.out.println("x: "+x+" y: "+y);
 						if (x< obstacleMinX) {
@@ -109,7 +112,7 @@ public class ImgCap {
         Point2D[] p2DCorners = {new Point2D(0,0), new Point2D(640,0), new Point2D(0,480), new Point2D(640,480)};        
         for( int i = 0; i < linesV.cols(); i++ )
         {
-        	//Line coordinate sets
+        	//Line coordinate sets (frame)
             double[] vec = linesV.get(0, i);
             double x1 = vec[0], 
                    y1 = vec[1],
@@ -118,7 +121,7 @@ public class ImgCap {
             if(((x1 < 75 || x1 > 565) && (y1 < 75 || y1 > 405)) || ((x2 < 75 || x2 > 565) && (y2 < 75 || y2 > 405))) {
                 Point start = new Point(x1, y1);
                 Point end = new Point(x2, y2);
-    		    Core.line( image, start, end, new Scalar(0,0,0),2);
+    		    Core.line( image2, start, end, new Scalar(0,0,0),2); //drawing found lines
     		    for(int j = i+1; j < linesV.cols(); j++ ) {
     	            double[] jvec = linesV.get(0, j);
     	            double x3 = jvec[0], 
@@ -152,34 +155,7 @@ public class ImgCap {
     		    }
             }
         }
-        //obstacle
-//        double[] obstacleLine;
-//        for( int i = 0; i < linesV.cols(); i++ )
-//        {
-//        	//Line coordinate sets
-//            double[] vec = linesV.get(0, i);
-//            double x1 = vec[0], 
-//                   y1 = vec[1],
-//                   x2 = vec[2],
-//                   y2 = vec[3];
-//            if (x1 < 325 && x2 < 370) {
-//            	if(x2> 325 && x1 > 270) {
-//		            Point start = new Point(x1, y1);
-//		            Point end = new Point(x2, y2);
-//				    Core.line( image2, start, end, new Scalar(0,0,0),2);
-//				    obstacleLine = new double[]{x1,y1,x2,y2};
-//            	}
-//            } else if (y1 < 220 && y2 < 270) {
-//            	if(y2 > 230 && y1 > 170 ) {
-//		            Point start = new Point(x1, y1);
-//		            Point end = new Point(x2, y2);
-//				    Core.line( image2, start, end, new Scalar(0,0,0),2);
-//				    obstacleLine = new double[]{x1,y1,x2,y2};
-//            	}
-//            	
-//            }
-//        }
-		//circles finding
+		//circles finding (balls)
 		ArrayList<Point2D> ballSet = new ArrayList<Point2D>();
 		Imgproc.HoughCircles(grayImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1, 15, 10, 20, 3, 10);
 		int radius;
@@ -197,26 +173,40 @@ public class ImgCap {
 	        radius = (int)Math.round(vCircle[2]);
 	
 	        // draw the found circle
-	        Core.circle(image, pt, radius, new Scalar(0,0,0), 2);
-	        Core.circle(image, pt, 1, new Scalar(0,255,0), 0);
+	        Core.circle(image, pt, radius, scalarColorB, 2);
+	        Core.circle(image, pt, 1, scalarColorT, 0);
         }
-		//robot front and back coordinates in P2D
-		Point2D robotF = new Point2D(robotFront[0]/robotFront[2],robotFront[1]/robotFront[2]);
-		Point2D robotB = new Point2D(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
 		//obstacle in P2D
 		Point2D obstacleTopLeft = new Point2D(obstacleMinX,obstacleMinY);
 		Point2D obstacleBottomRight = new Point2D(obstacleMaxX,obstacleMaxY);
+		Core.line(image, new Point(obstacleMinX,obstacleMinY), new Point(obstacleMinX,obstacleMaxY), scalarColorT,2);
+		Core.line(image, new Point(obstacleMinX,obstacleMinY), new Point(obstacleMaxX,obstacleMinY), scalarColorT,2);
+		Core.line(image, new Point(obstacleMaxX,obstacleMaxY), new Point(obstacleMinX,obstacleMaxY), scalarColorT,2);
+		Core.line(image, new Point(obstacleMaxX,obstacleMaxY), new Point(obstacleMaxX,obstacleMinY), scalarColorT,2);
+		
+		//robot front and back coordinates in P2D and drawing on the picture in red
+		scalarColorT = new Scalar(0,0,255);
+		Point2D robotF = new Point2D(robotFront[0]/robotFront[2],robotFront[1]/robotFront[2]);
+		Point2D robotB = new Point2D(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
+		Core.circle(image, new Point(robotF.getX(),robotF.getY()), 3,  scalarColorT,2);
+		Core.circle(image, new Point(robotB.getX(),robotB.getY()), 3,  scalarColorT,2);
+		
 		//Goals in P2D
 		double tempd = (p2DCorners[0].distance(p2DCorners[2])/2)+p2DCorners[0].getY();
-		
 		Point2D topLeftGoal = new Point2D(p2DCorners[0].getX(),tempd-12);
 		Point2D bottomLeftGoal = new Point2D(p2DCorners[0].getX(),tempd+12);
 		tempd = (p2DCorners[1].distance(p2DCorners[3])/2)+p2DCorners[1].getY();
 		Point2D topRightGoal = new Point2D(p2DCorners[1].getX(),tempd-25);
 		Point2D bottomRightGoal = new Point2D(p2DCorners[3].getX(),tempd+25);
         
+		//drawing frame
+		Core.line(image, new Point(p2DCorners[0].getX(),p2DCorners[0].getY()), new Point(p2DCorners[1].getX(),p2DCorners[1].getY()), scalarColorB,2);
+		Core.line(image, new Point(p2DCorners[0].getX(),p2DCorners[0].getY()), new Point(p2DCorners[2].getX(),p2DCorners[2].getY()), scalarColorB,2);
+		Core.line(image, new Point(p2DCorners[3].getX(),p2DCorners[3].getY()), new Point(p2DCorners[1].getX(),p2DCorners[1].getY()), scalarColorB,2);
+		Core.line(image, new Point(p2DCorners[3].getX(),p2DCorners[3].getY()), new Point(p2DCorners[2].getX(),p2DCorners[2].getY()), scalarColorB,2);
         
 		Highgui.imwrite("images\\scrCap.jpg",image);
+		Highgui.imwrite("images\\scrCap2.jpg",image2);
         long endTime = System.nanoTime();
         
 		//test prints
