@@ -11,17 +11,18 @@ import org.opencv.core.Size;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.*;
-//import org.opencv
-
 
 public class ImgCap {
 	private VideoCapture webCam;
+	private Point2D[] p2DCorners;
+	private Point2D[] goal;
 	public static void main( String[] args )
 	{
-
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		ImgCap obj = new ImgCap();
+		obj.frameLocation();
 		obj.picAnal();
+		obj.releaseCam();
 	}
 	
 	public ImgCap() {
@@ -51,7 +52,7 @@ public class ImgCap {
 		/*Picture end*/
 		
 		//Instantiating matrix
-		Mat shapes = new Mat();
+		Mat circles = new Mat();
 		Mat grayImg = new Mat(image.rows(),image.cols(),image.type());
 		Scalar scalarColorB = new Scalar(0,0,0); // black scalar
 		Scalar scalarColorT = new Scalar(0,255,0); //T scalar, initial color = green
@@ -68,28 +69,18 @@ public class ImgCap {
 		
 		//instantiating arrays for robot color positions
 		int[] robotFront = {0,0,0};
-		int[] robotBack = {0,0,0};	
+		int[] robotBack = {0,0,0};
+		Point2D robotF;
+		Point2D robotB;
 		
 		//Instantiating Point and Point2D to set new coordinates later
         Point pt = new Point();
         Point2D pt2D = new Point2D();
         
 		//instantiating shape variables
-        //lines
-        double d;
-        double xi;
-		double yi;
-		double x1, y1, x2, y2, x3, y3, x4, y4;
-		double[] vec = new double[4];
-		double[] jvec = new double[4];
 		double[] vCircle = new double[3];
-		//circles
         int radius;
 		ArrayList<Point2D> ballSet = new ArrayList<Point2D>();
-        
-		//Instantiating frame variables
-        Point2D[] goal = new Point2D[2];
-        Point2D[] p2DCorners = {new Point2D(0,0), new Point2D(cols,0), new Point2D(0,rows), new Point2D(cols,rows)};        
 
         /***************************************************************/
         /******************Run through the picture**********************/
@@ -129,63 +120,13 @@ public class ImgCap {
 		// Picture processing
 		Imgproc.cvtColor(image, grayImg, Imgproc.COLOR_BGRA2GRAY); 
 		Imgproc.GaussianBlur(grayImg, grayImg, new Size(3,3),0,0);
-        Imgproc.Canny(grayImg, shapes, 5, 60);
-
-        /***************************************************************/
-		/*************************Line finding**************************/
-        Imgproc.HoughLinesP(shapes, shapes, 1, Math.PI/180, 50, 200, 100 );
-        for( int i = 0; i < shapes.cols(); i++ )
-        {
-        	//Line coordinate sets (frame)
-        	vec = shapes.get(0, i);
-        	x1 = vec[0]; 
-        	y1 = vec[1];
-			x2 = vec[2];
-			y2 = vec[3];
-            if(((x1 < 75 || x1 > 565) && (y1 < 75 || y1 > 405)) || ((x2 < 75 || x2 > 565) && (y2 < 75 || y2 > 405))) {
-    		    for(int j = i+1; j < shapes.cols(); j++ ) {
-    	            jvec = shapes.get(0, j);
-    	            x3 = jvec[0]; 
-	            	y3 = jvec[1];
-	            	x4 = jvec[2];
-	            	y4 = jvec[3];
-    	    		d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-    	    		if (d != 0) {
-    		    		xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
-    		    		yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
-    		    		if (xi > 0 && xi<640 && yi > 0 && yi< 480) {
-    		    			if (xi < 75 && yi < 75) {
-    		    				if (xi >=  p2DCorners[0].getX() && yi >= p2DCorners[0].getY()) {
-    		    					p2DCorners[0] = pt2D.create(xi, yi);
-    				    		}
-    		    			} else if (xi > 565 && yi < 75) {
-    	    					if (xi <=  p2DCorners[1].getX() && yi >= p2DCorners[1].getY()) {
-    	    						p2DCorners[1] = pt2D.create(xi, yi);
-    				    		}
-    			    		} else if (xi < 75 && yi > 405) {
-    			    			if (xi >=  p2DCorners[2].getX() && yi <= p2DCorners[2].getY()) {
-    			    				p2DCorners[2] = pt2D.create(xi, yi);
-    				    		}
-    			    		} else if (xi > 565 && yi > 405) {
-    			    			if (xi <=  p2DCorners[3].getX() && yi <= p2DCorners[3].getY()) {
-    			    				p2DCorners[3] = pt2D.create(xi, yi);
-    				    		}
-    			    		}
-    		    		}
-    	    		}
-    		    }
-            }
-        }
-        /***************************************************************/
-        
-        //reset shapes
-        shapes = new Mat();
+        Imgproc.Canny(grayImg, circles, 5, 60);
 
         /***************************************************************/
         /***************circles finding (balls)*************************/
-		Imgproc.HoughCircles(grayImg, shapes, Imgproc.CV_HOUGH_GRADIENT, 1, 15, 10, 20, 3, 10);
-        for (int x = 0; x < shapes.cols(); x++) {
-        	vCircle = shapes.get(0,x);
+		Imgproc.HoughCircles(grayImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1, 15, 10, 20, 3, 10);
+        for (int x = 0; x < circles.cols(); x++) {
+        	vCircle = circles.get(0,x);
         	if (vCircle == null) {
         		//TODO return so that we know that there are no more balls
         		System.err.println("no circles found");
@@ -213,23 +154,24 @@ public class ImgCap {
 		Core.line(image, new Point(obstacleMaxX,obstacleMaxY), new Point(obstacleMinX,obstacleMaxY), scalarColorT,2);
 		Core.line(image, new Point(obstacleMaxX,obstacleMaxY), new Point(obstacleMaxX,obstacleMinY), scalarColorT,2);
 		
-		// Goals in P2D
-		double tempd = (p2DCorners[0].distance(p2DCorners[2])/2)+p2DCorners[0].getY();
-		goal[0] = pt2D.create(p2DCorners[0].getX(), tempd);
-		tempd = (p2DCorners[1].distance(p2DCorners[3])/2)+p2DCorners[1].getY();
-		goal[1] = pt2D.create(p2DCorners[1].getX(), tempd);
 		// Drawing goal points
 		Core.circle(image, new Point(goal[0].getX(), goal[0].getY()), 3, scalarColorT,2);
 		Core.circle(image, new Point(goal[1].getX(), goal[1].getY()), 3, scalarColorT,2);
 		
 		// Robot front and back coordinates in P2D
-		scalarColorT = new Scalar(0,0,255);
-		Point2D robotF = pt2D.create(robotFront[0]/robotFront[2],robotFront[1]/robotFront[2]);
-		Point2D robotB = pt2D.create(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
-		// Drawing front and back of robot
-		Core.circle(image, new Point(robotF.getX(),robotF.getY()), 3,  scalarColorT,2);
-		Core.circle(image, new Point(robotB.getX(),robotB.getY()), 3,  scalarColorT,2);
-	
+		if(robotBack[2] == 0 || robotFront[2] == 0) {
+			System.out.println("robot not found");
+			robotF = null;
+			robotB = null;
+		} else {
+			scalarColorT = new Scalar(0,0,255);
+			robotF = pt2D.create(robotFront[0]/robotFront[2],robotFront[1]/robotFront[2]);
+			robotB = pt2D.create(robotBack[0]/robotBack[2],robotBack[1]/robotBack[2]);
+			// Drawing front and back of robot
+			Core.circle(image, new Point(robotF.getX(),robotF.getY()), 3,  scalarColorT,2);
+			Core.circle(image, new Point(robotB.getX(),robotB.getY()), 3,  scalarColorT,2);
+		}
+		
 		//drawing frame
 		Core.line(image, new Point(p2DCorners[0].getX(),p2DCorners[0].getY()), new Point(p2DCorners[1].getX(),p2DCorners[1].getY()), scalarColorB,2);
 		Core.line(image, new Point(p2DCorners[0].getX(),p2DCorners[0].getY()), new Point(p2DCorners[2].getX(),p2DCorners[2].getY()), scalarColorB,2);
@@ -251,4 +193,87 @@ public class ImgCap {
 	public void releaseCam() {
 		webCam.release();
 	}
+	
+	public void frameLocation() {
+		Mat image = new Mat();	
+
+//		String filePath = "C:\\cdio\\41.bmp";
+//		image = Highgui.imread(filePath,1);
+		/*picture from cam*/
+		if (webCam.isOpened()) {
+			webCam.read(image);
+		} else {
+			webCam = new VideoCapture();
+			webCam.open(1); //0 for jbn, 1 for b�kh�j
+			webCam.read(image);
+		}
+		/*Picture end*/
+		int rows = image.rows();
+		int cols = image.cols();
+        double d;
+        double xi;
+		double yi;
+		double x1, y1, x2, y2, x3, y3, x4, y4;
+		double[] vec = new double[4];
+		double[] jvec = new double[4];
+        goal = new Point2D[2];
+        p2DCorners = new Point2D[]{new Point2D(0,0), new Point2D(cols,0), new Point2D(0,rows), new Point2D(cols,rows)};
+		Mat shapes = new Mat();
+		Mat grayImg = new Mat(image.rows(),image.cols(),image.type());
+		Imgproc.cvtColor(image, grayImg, Imgproc.COLOR_BGRA2GRAY); 
+		Imgproc.GaussianBlur(grayImg, grayImg, new Size(3,3),0,0);
+        Imgproc.Canny(grayImg, shapes, 5, 60);
+		
+        Imgproc.HoughLinesP(shapes, shapes, 1, Math.PI/180, 50, 200, 100 );
+        for( int i = 0; i < shapes.cols(); i++ )
+        {
+        	//Line coordinate sets (frame)
+        	vec = shapes.get(0, i);
+        	x1 = vec[0]; 
+        	y1 = vec[1];
+			x2 = vec[2];
+			y2 = vec[3];
+            if(((x1 < 75 || x1 > 565) && (y1 < 75 || y1 > 405)) || ((x2 < 75 || x2 > 565) && (y2 < 75 || y2 > 405))) {
+    		    for(int j = i+1; j < shapes.cols(); j++ ) {
+    	            jvec = shapes.get(0, j);
+    	            x3 = jvec[0]; 
+	            	y3 = jvec[1];
+	            	x4 = jvec[2];
+	            	y4 = jvec[3];
+    	    		d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    	    		if (d != 0) {
+    		    		xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
+    		    		yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
+    		    		if (xi > 0 && xi<640 && yi > 0 && yi< 480) {
+    		    			if (xi < 75 && yi < 75) {
+    		    				if (xi >=  p2DCorners[0].getX() && yi >= p2DCorners[0].getY()) {
+    		    					p2DCorners[0] = new Point2D(xi, yi);
+    				    		}
+    		    			} else if (xi > 565 && yi < 75) {
+    	    					if (xi <=  p2DCorners[1].getX() && yi >= p2DCorners[1].getY()) {
+    	    						p2DCorners[1] = new Point2D(xi, yi);
+    				    		}
+    			    		} else if (xi < 75 && yi > 405) {
+    			    			if (xi >=  p2DCorners[2].getX() && yi <= p2DCorners[2].getY()) {
+    			    				p2DCorners[2] = new Point2D(xi, yi);
+    				    		}
+    			    		} else if (xi > 565 && yi > 405) {
+    			    			if (xi <=  p2DCorners[3].getX() && yi <= p2DCorners[3].getY()) {
+    			    				p2DCorners[3] = new Point2D(xi, yi);
+    				    		}
+    			    		}
+    		    		}
+    	    		}
+    		    }
+            }
+        }
+		// Goals in P2D
+		double tempd = (p2DCorners[0].distance(p2DCorners[2])/2)+p2DCorners[0].getY();
+		goal[0] = new Point2D(p2DCorners[0].getX(), tempd);
+		tempd = (p2DCorners[1].distance(p2DCorners[3])/2)+p2DCorners[1].getY();
+		goal[1] = new Point2D(p2DCorners[1].getX(), tempd);
+	}
+	
+	
+	
 }
