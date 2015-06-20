@@ -4,6 +4,7 @@ package engine;
 //import java.awt.geom.Point2D;
 import imgProcessing.ImgCap;
 
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import math.geom2d.Vector2D;
 public class AlgoEngine {
 	final int GD;
 	Point2D targetBall;
-	Point2D robot_start;	
+	Point2D robot_front;	
 	int tolerance;
 	double distance;
 	String state;
@@ -49,15 +50,15 @@ public class AlgoEngine {
 	 */
 	public AlgoEngine(){
 		targetBall = null;
-		tolerance = 15;
+		tolerance = 2;
 		distance = 0;
 		state = "START";
 //		robotV = null;
-		courseV = null;
+		courseV = new Vector2D(0,0);
 		ballsCollected = 0;
 		GD = 50;
 		
-		robot_start = new Point2D(0, 0);
+		robot_front = new Point2D(0, 0);
 		
 		commands = new ArrayList<String>();
 	} 
@@ -71,6 +72,7 @@ public class AlgoEngine {
 	
 	public void run(Point2D[] balls, Point2D[] robot, Point2D[] wall, Point2D[] obst, Point2D[] goals){
 		// Obstacle can be made into a rectangle if needed
+		robot_front = robot[0];
 		commands.clear();
 		switch(state){
 		/* START */
@@ -86,7 +88,7 @@ public class AlgoEngine {
 			 * */
 			setNearestBall(balls, robot, wall, obst);
 			robotV = new Vector2D(robot[1], robot[0]);
-			courseV = new Vector2D(robot[0], targetBall);
+			try{ courseV = new Vector2D(robot[0], targetBall);
 			if(checkInterSection(obst, robot[0], targetBall)){
 				if (Math.abs(robot[0].getX() - targetBall.getX()) > Math.abs(robot[0].getY() - targetBall.getY())){
 					int i = 50;
@@ -100,6 +102,8 @@ public class AlgoEngine {
 				state = "REDIRECTED";
 				break;
 			}
+			}
+			catch (NullPointerException e) { };
 			double degree = degree(robotV, courseV);
 			
 			if(turnRight(degree)==true) {
@@ -222,8 +226,10 @@ public class AlgoEngine {
 	 * @param obst - same as wall. 
 	 */
 	private void setNearestBall(Point2D[] balls, Point2D[] robot, Point2D[] wall, Point2D[] obst){
-		targetBall = null;
-		distance = robot[0].distance(balls[0]);
+		try{distance = robot[0].distance(balls[0]);}
+		catch(ArrayIndexOutOfBoundsException e){
+			return;
+		}
 		int NGD = 20 ;
 		
 		for(int i = 0 ; i < balls.length ; i++){
@@ -252,7 +258,7 @@ public class AlgoEngine {
 	 * @param j Should always be the vector from the robot to the ball
 	 * @return Degree from l to j counterclockwise
 	 */
-	private double degree (Vector2D l, Vector2D j) {
+	private int degree (Vector2D l, Vector2D j) {
 		double degree = 0;
 		
 		double dotProdukt = Vector2D.dot(l, j);
@@ -263,7 +269,7 @@ public class AlgoEngine {
 
 		degree = Math.acos(dotProdukt/(kvadratrodL*kvadratrodJ));
 		degree = degree*180 / Math.PI;
-		return degree;
+		return (int)degree;
 	}
 	
 	private boolean turnRight(double degree){
@@ -286,12 +292,17 @@ public class AlgoEngine {
 		return l.intersects(r);
 	}
 	
-	public Point2D courseStart(){
-		return new Point2D(120, 120);
+	public Point courseStart(){
+		return new Point((int) robot_front.getX() , (int) robot_front.getY());
 	}
 	
-	public Point2D courseEnd(){
-		return new Point2D(200, 200);
+	public Point courseEnd(){
+		try{
+		return new Point((int) targetBall.getX(), (int) targetBall.getY());
+		}
+		catch (NullPointerException e){
+			return new Point(0,0);
+		}
 	}
 
 	/**

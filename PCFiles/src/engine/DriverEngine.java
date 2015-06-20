@@ -1,6 +1,7 @@
 package engine;
 
 import java.awt.Color;
+import java.awt.Point;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -35,7 +36,7 @@ public class DriverEngine {
 	 */
 	public DriverEngine(){
 		try {
-			con = new PCConn();
+//			con = new PCConn();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,25 +81,28 @@ public class DriverEngine {
 
 	private void engine(){
 		/* The only thing the engine should be running in a loop */
+		
+		cam.frameLocation();
 		while(true){
-			ImgInfo camInfo = cam.picAnal();
-			gui.updateImage();
-			algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame(), camInfo.getObstacle(), camInfo.getGoals());
-			for (String s : algo.getInstruction()){
-//				System.out.println(s + " ");
-			}
-//			System.out.println();
-			
-			for(String s : algo.getInstruction()) {
-				try {
-					System.out.println(s);
-					con.sendCommand(s);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					break;
+			try{
+				ImgInfo camInfo = cam.picAnal();
+				gui.updateImage();
+				gui.clearLines();
+				gui.drawLine(algo.courseStart(), algo.courseEnd());
+				gui.drawLine(new Point((int)camInfo.getRobot()[1].getX(), (int)camInfo.getRobot()[1].getY()), new Point((int)camInfo.getRobot()[0].getX(), (int)camInfo.getRobot()[0].getY()));
+				algo.run(camInfo.getBalls(), camInfo.getRobot(), camInfo.getFrame(), camInfo.getObstacle(), camInfo.getGoals());
+				
+				for(String s : algo.getInstruction()) {
+					try {
+						System.out.println(s);
+	//					con.sendCommand(s);
+					} catch (Exception e) {
+						e.printStackTrace();
+						break;
+					}
 				}
-			}
+		} catch (NullPointerException e) {
+			
 		}
 		//cam.releaseCam();
 		/* TO here */
@@ -140,5 +144,6 @@ public class DriverEngine {
 //				e.printStackTrace();
 //			}
 //		} /* Dummy data end*/
+	}
 	}
 }
